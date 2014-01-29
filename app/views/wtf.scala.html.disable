@@ -1,0 +1,4 @@
+@(message: String)
+@import helper.twitterBootstrap._
+
+<h1>What's the faacet ?</h1>
