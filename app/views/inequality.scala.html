@@ -1,0 +1,306 @@
+@(inequality: com.faacets.impl.InequalityEntry)
+
+@main(inequality.path.toString) {
+  @path(inequality.path) {
+<div>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#original" data-toggle="tab">Original inequality</a></li>
+        <li><a href="#canonical" data-toggle="tab">Canonical inequality</a></li>
+	<li><a href="#transform" data-toggle="tab">Transform</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="original">
+	  
+
+<div class="row" style="margin-top:20px"></div>
+<div class="row">
+  <div class="col-lg-2">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Scenario</h3>
+      </div>
+      
+<p>{[2 2] [2 2]}</p>
+
+    </div>
+  </div>
+  <div class="col-lg-10">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Description</h3>
+      </div>
+      
+<p>Form of the CGLMP inequality for dimension 2 given by Acin in 2005.
+CGLMP inequality for dimension 2 given by Collins et al. in 2001, proven tight by Masanes in 2002
+Inequality I2222 in CollinsGisin2004.</p>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Inequality</h3>
+      </div>
+      
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#canonical-1-frepr" data-toggle="tab">Full probabilities</a></li>
+  <li class=""><a href="#canonical-1-ngrepr" data-toggle="tab">Collins-Gisin</a></li>
+  <li class=""><a
+  href="#canonical-1-ncrepr" data-toggle="tab">Correlators</a></li>
+    <li><a href="#canonical-1-frepr-eq" data-toggle="tab">FP (eq)</a></li>
+  <li><a href="#canonical-1-ngrepr-eq" data-toggle="tab">CG (eq)</a></li>
+  <li><a href="#canonical-1-ncrepr-eq" data-toggle="tab">Correlators (eq)</a></li>
+
+</ul>
+<div class="tab-content">
+<div class="tab-pane active"
+  id="canonical-1-frepr" style="overflow: auto; white-space: nowrap">
+  $$x = \left ( \begin{array}{rr:rr} \\ \tooltip{-1}{\text{P(11|11)}} &amp; \tooltip{1}{\text{P(12|11)}} &amp; \tooltip{-1}{\text{P(11|12)}} &amp; \tooltip{1}{\text{P(12|12)}} \\  \\ \tooltip{1}{\text{P(21|11)}} &amp; \tooltip{-1}{\text{P(22|11)}} &amp; \tooltip{1}{\text{P(21|12)}} &amp; \tooltip{-1}{\text{P(22|12)}} \\ \hdashline \\ \tooltip{-1}{\text{P(11|21)}} &amp; \tooltip{1}{\text{P(12|21)}} &amp; \tooltip{1}{\text{P(11|22)}} &amp; \tooltip{-1}{\text{P(12|22)}} \\  \\ \tooltip{1}{\text{P(21|21)}} &amp; \tooltip{-1}{\text{P(22|21)}} &amp; \tooltip{-1}{\text{P(21|22)}} &amp; \tooltip{1}{\text{P(22|22)}}\end{array}\right )$$
+</div>
+<div class="tab-pane "
+  id="canonical-1-ngrepr" style="overflow: auto; white-space: nowrap">
+  $$x = \left ( \begin{array}{r|rr} \\ \tooltip{-2}{\text{P_(|)}} &amp; \tooltip{4}{\text{P_B(1|1)}} &amp; \tooltip{0}{\text{P_B(1|2)}} \\ \hline \\ \tooltip{4}{\text{P_A(1|1)}} &amp; \tooltip{-4}{\text{P_AB(1,1|1,1)}} &amp; \tooltip{-4}{\text{P_AB(1,1|1,2)}} \\  \\ \tooltip{0}{\text{P_A(1|2)}} &amp; \tooltip{-4}{\text{P_AB(1,1|2,1)}} &amp; \tooltip{4}{\text{P_AB(1,1|2,2)}}\end{array}\right )$$
+</div>
+<div class="tab-pane "
+  id="canonical-1-ncrepr" style="overflow: auto; white-space: nowrap">
+  $$x = \left ( \begin{array}{r|rr} \\ \tooltip{0}{\text{&lt;&gt;}} &amp; \tooltip{0}{\text{&lt;B1&gt;}} &amp; \tooltip{0}{\text{&lt;B2&gt;}} \\ \hline \\ \tooltip{0}{\text{&lt;A1&gt;}} &amp; \tooltip{-1}{\text{&lt;A1 B1&gt;}} &amp; \tooltip{-1}{\text{&lt;A1 B2&gt;}} \\  \\ \tooltip{0}{\text{&lt;A2&gt;}} &amp; \tooltip{-1}{\text{&lt;A2 B1&gt;}} &amp; \tooltip{1}{\text{&lt;A2 B2&gt;}}\end{array}\right )$$
+</div>
+<div class="tab-pane" id="canonical-1-frepr-eq">
+  $$x =$$ - P(11|11) + P(21|11) - P(11|21) + P(21|21) + P(12|11) - P(22|11) + P(12|21) - P(22|21) - P(11|12) + P(21|12) + P(11|22) - P(21|22) + P(12|12) - P(22|12) - P(12|22) + P(22|22)
+</div>
+<div class="tab-pane"
+  id="canonical-1-ngrepr-eq">
+  $$x = $$ - 2 P_(|) + 4 P_A(1|1) + 4 P_B(1|1) - 4 P_AB(1,1|1,1) - 4 P_AB(1,1|2,1) - 4 P_AB(1,1|1,2) + 4 P_AB(1,1|2,2)
+</div>
+<div class="tab-pane"
+  id="canonical-1-ncrepr-eq">
+  $$x = $$ - &lt;A1 B1&gt; - &lt;A2 B1&gt; - &lt;A1 B2&gt; + &lt;A2 B2&gt;
+</div>
+</div>
+
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Bounds</h3>
+      </div>
+      
+<ul>
+
+  <li>local : $$x \le 2$$  (facet)</li>
+
+</ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Symmetry group</h3>
+      </div>
+      
+<h3>Symmetry group</h3>
+<div><p>Symmetry group of order: 16</p>
+    <p>Generators:</p>
+    <ul>
+      <li>A1(1,2) A2(1,2) B1(1,2) B2(1,2) (A,B)</li><li>A2(1,2) B(1,2) (A,B)</li>
+    </ul>
+    <p>Elements:</p><ul><li>identity</li><li>A2(1,2) B(1,2) (A,B)</li><li>A1(1,2) A2(1,2) B1(1,2) B2(1,2)</li><li>A1(1,2) B1(1,2) B2(1,2) B(1,2) (A,B)</li><li>B2(1,2) A(1,2) (A,B)</li><li>A1(1,2) B2(1,2) A(1,2) B(1,2)</li><li>A1(1,2) A2(1,2) B1(1,2) A(1,2) (A,B)</li><li>A2(1,2) B1(1,2) A(1,2) B(1,2)</li><li>(A,B)</li><li>B2(1,2) A(1,2)</li><li>A1(1,2) A2(1,2) B1(1,2) B2(1,2) (A,B)</li><li>A1(1,2) A2(1,2) B1(1,2) A(1,2)</li><li>A2(1,2) B(1,2)</li><li>A2(1,2) B1(1,2) A(1,2) B(1,2) (A,B)</li><li>A1(1,2) B1(1,2) B2(1,2) B(1,2)</li><li>A1(1,2) B2(1,2) A(1,2) B(1,2) (A,B)</li></ul>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Sources</h3>
+      </div>
+      
+<ul>
+
+  <li><div><a href="http://dx.doi.org/doi:10.1103/PhysRevLett.95.210402">doi:10.1103/PhysRevLett.95.210402</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0506225">arXiv:quant-ph/0506225</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0210073">arXiv:quant-ph/0210073</a></div></li>
+
+  <li><div><a href="http://dx.doi.org/doi:10.1103/PhysRevLett.88.040404">doi:10.1103/PhysRevLett.88.040404</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0106024">arXiv:quant-ph/0106024</a></div></li>
+
+  <li><div><a href="http://dx.doi.org/doi:10.1088/0305-4470/37/5/021">doi:10.1088/0305-4470/37/5/021</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0306129">arXiv:quant-ph/0306129</a></div></li>
+
+</ul>
+
+    </div>
+  </div>
+</div>
+
+        </div>
+        <div class="tab-pane" id="canonical">
+	  
+
+<div class="row" style="margin-top:20px"></div>
+<div class="row">
+  <div class="col-lg-2">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Scenario</h3>
+      </div>
+      
+<p>{[2 2] [2 2]}</p>
+
+    </div>
+  </div>
+  <div class="col-lg-10">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Description</h3>
+      </div>
+      
+<p>Form of the CGLMP inequality for dimension 2 given by Acin in 2005.
+CGLMP inequality for dimension 2 given by Collins et al. in 2001, proven tight by Masanes in 2002
+Inequality I2222 in CollinsGisin2004.</p>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Inequality</h3>
+      </div>
+      
+
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#canonical-1-frepr" data-toggle="tab">Full probabilities</a></li>
+  <li class=""><a href="#canonical-1-ngrepr" data-toggle="tab">Collins-Gisin</a></li>
+  <li class=""><a
+  href="#canonical-1-ncrepr" data-toggle="tab">Correlators</a></li>
+    <li><a href="#canonical-1-frepr-eq" data-toggle="tab">FP (eq)</a></li>
+  <li><a href="#canonical-1-ngrepr-eq" data-toggle="tab">CG (eq)</a></li>
+  <li><a href="#canonical-1-ncrepr-eq" data-toggle="tab">Correlators (eq)</a></li>
+
+</ul>
+<div class="tab-content">
+<div class="tab-pane active"
+  id="canonical-1-frepr" style="overflow: auto; white-space: nowrap">
+  $$x = \left ( \begin{array}{rr:rr} \\ \tooltip{-1}{\text{P(11|11)}} &amp; \tooltip{1}{\text{P(12|11)}} &amp; \tooltip{-1}{\text{P(11|12)}} &amp; \tooltip{1}{\text{P(12|12)}} \\  \\ \tooltip{1}{\text{P(21|11)}} &amp; \tooltip{-1}{\text{P(22|11)}} &amp; \tooltip{1}{\text{P(21|12)}} &amp; \tooltip{-1}{\text{P(22|12)}} \\ \hdashline \\ \tooltip{-1}{\text{P(11|21)}} &amp; \tooltip{1}{\text{P(12|21)}} &amp; \tooltip{1}{\text{P(11|22)}} &amp; \tooltip{-1}{\text{P(12|22)}} \\  \\ \tooltip{1}{\text{P(21|21)}} &amp; \tooltip{-1}{\text{P(22|21)}} &amp; \tooltip{-1}{\text{P(21|22)}} &amp; \tooltip{1}{\text{P(22|22)}}\end{array}\right )$$
+</div>
+<div class="tab-pane "
+  id="canonical-1-ngrepr" style="overflow: auto; white-space: nowrap">
+  $$x = \left ( \begin{array}{r|rr} \\ \tooltip{-2}{\text{P_(|)}} &amp; \tooltip{4}{\text{P_B(1|1)}} &amp; \tooltip{0}{\text{P_B(1|2)}} \\ \hline \\ \tooltip{4}{\text{P_A(1|1)}} &amp; \tooltip{-4}{\text{P_AB(1,1|1,1)}} &amp; \tooltip{-4}{\text{P_AB(1,1|1,2)}} \\  \\ \tooltip{0}{\text{P_A(1|2)}} &amp; \tooltip{-4}{\text{P_AB(1,1|2,1)}} &amp; \tooltip{4}{\text{P_AB(1,1|2,2)}}\end{array}\right )$$
+</div>
+<div class="tab-pane "
+  id="canonical-1-ncrepr" style="overflow: auto; white-space: nowrap">
+  $$x = \left ( \begin{array}{r|rr} \\ \tooltip{0}{\text{&lt;&gt;}} &amp; \tooltip{0}{\text{&lt;B1&gt;}} &amp; \tooltip{0}{\text{&lt;B2&gt;}} \\ \hline \\ \tooltip{0}{\text{&lt;A1&gt;}} &amp; \tooltip{-1}{\text{&lt;A1 B1&gt;}} &amp; \tooltip{-1}{\text{&lt;A1 B2&gt;}} \\  \\ \tooltip{0}{\text{&lt;A2&gt;}} &amp; \tooltip{-1}{\text{&lt;A2 B1&gt;}} &amp; \tooltip{1}{\text{&lt;A2 B2&gt;}}\end{array}\right )$$
+</div>
+<div class="tab-pane" id="canonical-1-frepr-eq">
+  $$x =$$ - P(11|11) + P(21|11) - P(11|21) + P(21|21) + P(12|11) - P(22|11) + P(12|21) - P(22|21) - P(11|12) + P(21|12) + P(11|22) - P(21|22) + P(12|12) - P(22|12) - P(12|22) + P(22|22)
+</div>
+<div class="tab-pane"
+  id="canonical-1-ngrepr-eq">
+  $$x = $$ - 2 P_(|) + 4 P_A(1|1) + 4 P_B(1|1) - 4 P_AB(1,1|1,1) - 4 P_AB(1,1|2,1) - 4 P_AB(1,1|1,2) + 4 P_AB(1,1|2,2)
+</div>
+<div class="tab-pane"
+  id="canonical-1-ncrepr-eq">
+  $$x = $$ - &lt;A1 B1&gt; - &lt;A2 B1&gt; - &lt;A1 B2&gt; + &lt;A2 B2&gt;
+</div>
+</div>
+
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Bounds</h3>
+      </div>
+      
+<ul>
+
+  <li>local : $$x \le 2$$  (facet)</li>
+
+</ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Symmetry group</h3>
+      </div>
+      
+<h3>Symmetry group</h3>
+<div><p>Symmetry group of order: 16</p>
+    <p>Generators:</p>
+    <ul>
+      <li>A1(1,2) A2(1,2) B1(1,2) B2(1,2) (A,B)</li><li>A2(1,2) B(1,2) (A,B)</li>
+    </ul>
+    <p>Elements:</p><ul><li>identity</li><li>B2(1,2) A(1,2)</li><li>A1(1,2) A2(1,2) B1(1,2) B2(1,2) (A,B)</li><li>A1(1,2) B1(1,2) B2(1,2) B(1,2) (A,B)</li><li>B2(1,2) A(1,2) (A,B)</li><li>A2(1,2) B1(1,2) A(1,2) B(1,2) (A,B)</li><li>A1(1,2) B1(1,2) B2(1,2) B(1,2)</li><li>A2(1,2) B1(1,2) A(1,2) B(1,2)</li><li>(A,B)</li><li>A2(1,2) B(1,2) (A,B)</li><li>A1(1,2) A2(1,2) B1(1,2) B2(1,2)</li><li>A1(1,2) A2(1,2) B1(1,2) A(1,2)</li><li>A2(1,2) B(1,2)</li><li>A1(1,2) B2(1,2) A(1,2) B(1,2)</li><li>A1(1,2) A2(1,2) B1(1,2) A(1,2) (A,B)</li><li>A1(1,2) B2(1,2) A(1,2) B(1,2) (A,B)</li></ul>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+        <h3 class="panel-title">Sources</h3>
+      </div>
+      
+<ul>
+
+  <li><div><a href="http://dx.doi.org/doi:10.1103/PhysRevLett.95.210402">doi:10.1103/PhysRevLett.95.210402</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0506225">arXiv:quant-ph/0506225</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0210073">arXiv:quant-ph/0210073</a></div></li>
+
+  <li><div><a href="http://dx.doi.org/doi:10.1103/PhysRevLett.88.040404">doi:10.1103/PhysRevLett.88.040404</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0106024">arXiv:quant-ph/0106024</a></div></li>
+
+  <li><div><a href="http://dx.doi.org/doi:10.1088/0305-4470/37/5/021">doi:10.1088/0305-4470/37/5/021</a></div></li>
+
+  <li><div><a href="http://arxiv.org/abs/arXiv:quant-ph/0306129">arXiv:quant-ph/0306129</a></div></li>
+
+</ul>
+
+    </div>
+  </div>
+</div>
+
+        </div>
+        <div class="tab-pane" id="transform">
+	  
+
+<h3>Original scenario</h3>
+<p>{[2 2] [2 2]}</p>
+<h3>Original representation</h3>
+<p>FRepr</p>
+<h3>Normalization and signaling cruft</h3>
+<p> 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</p>
+<h3>Affine transform</h3>
+<p>Affine(1,0)</p>
+<h3>Permuted by</h3>
+<p></p>
+
+        </div>
+</div>
+
+}
+}

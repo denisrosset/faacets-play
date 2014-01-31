@@ -1,0 +1,212 @@
+'doi:10.1016/S0375-9601(03)01115-0': |
+  @article{Sliwa2003165,
+  title = "Symmetries of the Bell correlation inequalities ",
+  journal = "Physics Letters A ",
+  volume = "317",
+  number = "3-4",
+  pages = "165--168",
+  year = "2003",
+  note = "",
+  issn = "0375-9601",
+  doi = "http://dx.doi.org/10.1016/S0375-9601(03)01115-0",
+  url = "http://www.sciencedirect.com/science/article/pii/S0375960103011150",
+  author = "Cezary \'{S}liwa"
+  }
+'doi:10.1103/PhysRevLett.92.250404': |
+  @article{PhysRevLett.92.250404,
+  title = {Coincidence Bell Inequality for Three Three-Dimensional Systems},
+  author = {Ac\'\in, A. and Chen, J. L. and Gisin, N. and Kaszlikowski, D. and Kwek, L. C. and Oh, C. H. and \ifmmode \dot{Z}\else \.{Z}\fi{}ukowski, M.},
+  journal = {Phys. Rev. Lett.},
+  volume = {92},
+  issue = {25},
+  pages = {250404},
+  numpages = {4},
+  year = {2004},
+  month = {Jun},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.92.250404},
+  url = {http://link.aps.org/doi/10.1103/PhysRevLett.92.250404}
+  }
+'doi:10.1103/PhysRevLett.88.040404': |
+  @article{PhysRevLett.88.040404,
+  title = {Bell Inequalities for Arbitrarily High-Dimensional Systems},
+  author = {Collins, Daniel and Gisin, Nicolas and Linden, Noah and Massar, Serge and Popescu, Sandu},
+  journal = {Phys. Rev. Lett.},
+  volume = {88},
+  issue = {4},
+  pages = {040404},
+  numpages = {4},
+  year = {2002},
+  month = {Jan},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.88.040404},
+  url = {http://link.aps.org/doi/10.1103/PhysRevLett.88.040404}
+  }
+'doi:10.1088/0305-4470/37/5/021': |
+  @article{0305-4470-37-5-021,
+  author={Daniel Collins and Nicolas Gisin},
+  title={A relevant two qubit Bell inequality inequivalent to the CHSH inequality},
+  journal={Journal of Physics A: Mathematical and General},
+  volume={37},
+  number={5},
+  pages={1775},
+  url={http://stacks.iop.org/0305-4470/37/i=5/a=021},
+  year={2004},
+  abstract={We computationally investigate the complete polytope of Bell inequalities for two particles with small numbers of possible measurements and outcomes. Our approach is limited by Pitowsky's connection of this problem to the computationally hard NP problem. Despite this, we find that there are very few relevant inequivalent inequalities for small numbers. For example, in the case with three possible 2-outcome measurements on each particle, there is just one new inequality. We describe mixed 2-qubit states which violate this inequality but not the CHSH. The new inequality also illustrates a sharing of bi-partite non-locality between three qubits: something not seen using the CHSH inequality. It also inspires us to discover a class of Bell inequalities with m possible n -outcome measurements on each particle.}
+  }
+'doi:10.1103/PhysRevLett.65.1838': |
+  @article{PhysRevLett.65.1838,
+  title = {Extreme quantum entanglement in a superposition of macroscopically distinct states},
+  author = {Mermin, N. David},
+  journal = {Phys. Rev. Lett.},
+  volume = {65},
+  issue = {15},
+  pages = {1838--1840},
+  numpages = {0},
+  year = {1990},
+  month = {Oct},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.65.1838},
+  url = {http://link.aps.org/doi/10.1103/PhysRevLett.65.1838}
+  }
+'doi:10.1016/j.dam.2007.03.005': |
+  @article{Avis:2007:NCF:1280298.1280567,
+  author = {Avis, David and Ito, Tsuyoshi},
+  title = {New Classes of Facets of the Cut Polytope and Tightness of Imm22 Bell Inequalities},
+  journal = {Discrete Appl. Math.},
+  issue_date = {August, 2007},
+  volume = {155},
+  number = {13},
+  month = aug,
+  year = {2007},
+  issn = {0166-218X},
+  pages = {1689--1699},
+  numpages = {11},
+  url = {http://dx.doi.org/10.1016/j.dam.2007.03.005},
+  doi = {10.1016/j.dam.2007.03.005},
+  acmid = {1280567},
+  publisher = {Elsevier Science Publishers B. V.},
+  address = {Amsterdam, The Netherlands, The Netherlands},
+  keywords = {05C99, 52B12, 90C27, Correlation polytope, Cut polytope, Grishukhin inequality, Imm22 Bell inequality},
+  }
+'doi:10.1103/PhysRevLett.95.210402': |
+  @article{PhysRevLett.95.210402,
+  title = {Optimal Bell Tests Do Not Require Maximally Entangled States},
+  author = {Ac\'\in, Antonio and Gill, Richard and Gisin, Nicolas},
+  journal = {Phys. Rev. Lett.},
+  volume = {95},
+  issue = {21},
+  pages = {210402},
+  numpages = {4},
+  year = {2005},
+  month = {Nov},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.95.210402},
+  url = {http://link.aps.org/doi/10.1103/PhysRevLett.95.210402}
+  }
+'doi:10.1103/PhysRevLett.23.880': |
+  @article{PhysRevLett.23.880,
+  title = {Proposed Experiment to Test Local Hidden-Variable Theories},
+  author = {Clauser, John F. and Horne, Michael A. and Shimony, Abner and Holt, Richard A.},
+  journal = {Phys. Rev. Lett.},
+  volume = {23},
+  issue = {15},
+  pages = {880--884},
+  numpages = {0},
+  year = {1969},
+  month = {Oct},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.23.880},
+  url = {http://link.aps.org/doi/10.1103/PhysRevLett.23.880}
+  }
+'doi:10.1007/BF00417500': |
+  @article{
+  year={1980},
+  issn={0377-9017},
+  journal={Letters in Mathematical Physics},
+  volume={4},
+  number={2},
+  doi={10.1007/BF00417500},
+  title={Quantum generalizations of Bell's inequality},
+  url={http://dx.doi.org/10.1007/BF00417500},
+  publisher={Kluwer Academic Publishers},
+  author={Cirel'son, B.S.},
+  pages={93-100},
+  language={English}
+  }
+'doi:10.1103/PhysRevA.47.R747': |
+  @article{PhysRevA.47.R747,
+  title = {Background level and counter efficiencies required for a loophole-free Einstein-Podolsky-Rosen experiment},
+  author = {Eberhard, Philippe H.},
+  journal = {Phys. Rev. A},
+  volume = {47},
+  issue = {2},
+  pages = {R747--R750},
+  numpages = {0},
+  year = {1993},
+  month = {Feb},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevA.47.R747},
+  url = {http://link.aps.org/doi/10.1103/PhysRevA.47.R747}
+  }
+doi:10.1111/j.1749-6632.1986.tb12444.x: |
+  @article {NYAS:NYAS422,
+  author = {MERMIN, N. DAVID},
+  title = {The EPR Experiment - Thoughts about the "Loophole"},
+  journal = {Annals of the New York Academy of Sciences},
+  volume = {480},
+  number = {1},
+  publisher = {Blackwell Publishing Ltd},
+  issn = {1749-6632},
+  url = {http://dx.doi.org/10.1111/j.1749-6632.1986.tb12444.x},
+  doi = {10.1111/j.1749-6632.1986.tb12444.x},
+  pages = {422--427},
+  year = {1986},
+  }
+'doi:10.1103/PhysRevD.35.3831': |
+  @article{PhysRevD.35.3831,
+  title = {Detector inefficiencies in the Einstein-Podolsky-Rosen experiment},
+  author = {Garg, Anupam and Mermin, N. D.},
+  journal = {Phys. Rev. D},
+  volume = {35},
+  issue = {12},
+  pages = {3831--3835},
+  numpages = {0},
+  year = {1987},
+  month = {Jun},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevD.35.3831},
+  url = {http://link.aps.org/doi/10.1103/PhysRevD.35.3831}
+  }
+
+'doi:10.1007/BF02903286': |
+  @article{
+  year={1981},
+  issn={0369-3554},
+  journal={Il Nuovo Cimento B},
+  volume={64},
+  number={2},
+  doi={10.1007/BF02903286},
+  title={Constructive generalization of Bell's inequalities},
+  url={http://dx.doi.org/10.1007/BF02903286},
+  publisher={Societ{\`a} Italiana di Fisica},
+  author={Froissart, M.},
+  pages={241-251},
+  language={English}
+  }
+
+'doi:10.1103/PhysRevA.82.022116': |
+  @article{PhysRevA.82.022116,
+  title = {Maximal violation of a bipartite three-setting, two-outcome Bell inequality using infinite-dimensional quantum systems},
+  author = {P\'al, K\'aroly F. and V\'ertesi, Tam\'as},
+  journal = {Phys. Rev. A},
+  volume = {82},
+  issue = {2},
+  pages = {022116},
+  numpages = {8},
+  year = {2010},
+  month = {Aug},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevA.82.022116},
+  url = {http://link.aps.org/doi/10.1103/PhysRevA.82.022116}
+  }
