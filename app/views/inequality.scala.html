@@ -1,4 +1,4 @@
-@(inequality: com.faacets.impl.InequalityEntry)
+@(entry: com.faacets.impl.InequalityEntry)
 
 @scripts = {
 <script type="text/javascript" src="@routes.Assets.at("javascripts/shCore.js")"></script>
@@ -6,8 +6,8 @@
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 }
 
-@main(inequality.path.mkString("/"), scripts) {
-@path(inequality.path)
+@main(entry.path.mkString("/"), scripts) {
+@path(entry.path)
 <div>
   <ul class="nav nav-tabs">
     <li class="active"><a href="#inequality" data-toggle="tab">Inequality</a></li>
@@ -17,18 +17,18 @@
   <div class="tab-content">
     <div class="tab-pane active" id="inequality">
       <div class="row" style="margin-top:20px"></div>
-      @row1(inequality)
-      @row2(inequality)
-      @row3(inequality)
+      @row1(entry)
+      @row2(entry, new VecViewHelper(entry.inequality.bra))
+      @row3(entry)
     </div>
     <div class="tab-pane" id="decomposition">
 <pre class="brush: yaml">
-@(inequality.inequality.decomposition.map(com.faacets.Yaml.saveString(_)).getOrElse("No decomposition available"))
+@(entry.inequality.decomposition.map(com.faacets.Yaml.saveString(_)).getOrElse("No decomposition available"))
 </pre>
     </div>
     <div class="tab-pane" id="yaml">
 <pre class="brush: yaml">
-@(com.faacets.Yaml.saveString(inequality.inequality))
+@(entry.yaml)
 </pre>
     </div>
   </div>

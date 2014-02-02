@@ -1,4 +1,4 @@
-@(entry: com.faacets.impl.InequalityEntry)
+@(entry: com.faacets.impl.InequalityEntry, vvh: VecViewHelper)
 
 <div class="row">
   <div class="col-lg-8">
@@ -9,42 +9,19 @@
       
 
       <ul class="nav nav-tabs">
-	<li class="active"><a href="#canonical-1-frepr" data-toggle="tab">Full probabilities</a></li>
-	<li class=""><a href="#canonical-1-ngrepr" data-toggle="tab">Collins-Gisin</a></li>
-	<li class=""><a
-	  href="#canonical-1-ncrepr" data-toggle="tab">Correlators</a></li>
-	<li><a href="#canonical-1-frepr-eq" data-toggle="tab">FP (eq)</a></li>
-	<li><a href="#canonical-1-ngrepr-eq" data-toggle="tab">CG (eq)</a></li>
-	<li><a href="#canonical-1-ncrepr-eq" data-toggle="tab">Correlators (eq)</a></li>
-
+	@for((notation, index) <- vvh.notations.zipWithIndex) {
+	  <li class="@(if (index == 0) "active" else "")">
+	    <a href="#coeffs-@(notation.id)" data-toggle="tab">@(notation.title)</a>
+	  </li>
+	}
       </ul>
       <div class="tab-content">
-	<div class="tab-pane active"
-	     id="canonical-1-frepr" style="overflow: auto; white-space: nowrap">
-	  $$ x = @(Tex.fromVec(entry.inequality.bra.as(com.faacets.impl.SPRepresentation))) $$
-	</div>
-	<div class="tab-pane"
-	     id="canonical-1-ngrepr" style="overflow: auto; white-space: nowrap">
-	  $$ x = @(Tex.fromVec(entry.inequality.bra.as(com.faacets.impl.NGRepresentation))) $$
-	</div>
-
-	<div class="tab-pane "
-	     id="canonical-1-ncrepr" style="overflow: auto; white-space: nowrap">
-	  $$ x = @(Tex.fromVec(entry.inequality.bra.as(com.faacets.impl.NCRepresentation))) $$
-	</div>
-	<div class="tab-pane" id="canonical-1-frepr-eq">
-	  $$ x = $$ @(entry.inequality.bra.as(com.faacets.impl.SPRepresentation).niceString) 
-	</div>
-	
-	<div class="tab-pane"
-	     id="canonical-1-ngrepr-eq">
-	  $$ x = $$  @(entry.inequality.bra.as(com.faacets.impl.NGRepresentation).niceString) 
-	</div>
-	
-	<div class="tab-pane"
-	     id="canonical-1-ncrepr-eq">
-	  $$ x =$$  @(entry.inequality.bra.as(com.faacets.impl.NCRepresentation).niceString)
-	</div>
+	@for((notation, index) <- vvh.notations.zipWithIndex) {
+	  <div class="tab-pane@(if (index == 0) " active" else "")"
+	       id="coeffs-@(notation.id)" style="@(notation.style)">
+	    @(notation.content)
+	  </div>
+	}
       </div>
       
     </div>

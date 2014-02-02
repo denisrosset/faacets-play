@@ -1,0 +1,12 @@
+@(wtfForm:Form[WTF])
+
+@import helper._
+
+@main("What's the faacet ?") {
+  <h1>What's the faacet ?</h1>
+  @helper.form(action = routes.Application.wtfPost) {
+    @inputText(wtfForm("scenario"))
+    @textarea(wtfForm("coeffs"))
+  <input type="submit" value="Submit"/>
+  }
+}

@@ -79,10 +79,12 @@ case class DataTable(id: String, cols: Seq[DataColumn], rows: Seq[AnyRef]) {
     "aoColumns" -> JsArray(cols.map(_.sorting.json))
   ))
   def columnFilterJson = JsObject(Seq(
-    "sRangeFormat" -> JsString("from {from} to {to}"),
+    "sRangeFormat" -> JsString("{from} to {to}"),
     "aoColumns" -> JsArray(cols.map(_.filter.json))
   ))
 }
+
+case class WTF(scenario: String, coeffs: String)
 
 object Application extends Controller {
   val root = RootFolder(new java.io.File("data"))
@@ -161,11 +163,11 @@ object Application extends Controller {
       DataColumn("Key", ie(_).key.toString, sorting = AlphaNumSorting, StringFilter("#keyFilter"), Some(anyRefToPath)),
       DataColumn("Scenario", ie(_).inequality.bra.scenario.toText,
         sorting = StringSorting),
-      DataColumn("#parties", ie(_).scenarioInfo.numOfParties.toString,
+      DataColumn("#P", ie(_).scenarioInfo.numOfParties.toString,
         sorting = NumericSorting, filter = NumberRangeFilter("#partiesFilter")),
-      DataColumn("#ins", ie(_).scenarioInfo.maxNumInputs.toString,
+      DataColumn("#I", ie(_).scenarioInfo.maxNumInputs.toString,
         sorting = NumericSorting, filter = NumberRangeFilter("#inputsFilter")),
-      DataColumn("#outs", ie(_).scenarioInfo.maxNumOutputs.toString,
+      DataColumn("#O", ie(_).scenarioInfo.maxNumOutputs.toString,
         sorting = NumericSorting, filter = NumberRangeFilter("#outputsFilter")),
       DataColumn("#reprs", ie(_).symmetryInfo.numberOfRepresentatives.toString,
         sorting = NumericSorting, filter = NumberRangeFilter("#reprFilter")),
@@ -206,11 +208,21 @@ object Application extends Controller {
   def extractUrl(s: String) = 
     scala.xml.XML.loadString("<div>" + httpReplace(doiReplace(newArxivReplace(oldArxivReplace(s)))) + "</div>")
 
-/*
-  def wtf = Action {
-    Ok(views.html.wtf(""))
+  val wtfForm: Form[WTF] = Form(
+    mapping(
+      "scenario" -> nonEmptyText,
+      "coeffs" -> nonEmptyText
+    )(WTF.apply)(WTF.unapply)
+  )
+
+  def wtfPost = Action {
+    Ok(views.html.wtf(wtfForm))
   }
- */
+
+  def wtf = Action {
+    Ok(views.html.wtf(wtfForm))
+  }
+
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }

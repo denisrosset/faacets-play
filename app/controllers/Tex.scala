@@ -4,6 +4,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
+import play.api.templates._
 import com.faacets._
 import impl._
 import perm._
@@ -36,6 +37,43 @@ sealed abstract class Align {
 case object Left extends Align { def texChar = "l" }
 case object Center extends Align { def texChar = "c" }
 case object Right extends Align { def texChar = "r" }
+
+case class Notation(id: String, title: String, content: Html, style: String = "overflow: auto; white-space: nowrap")
+
+class VecViewHelper(vec: GenVec) {
+  def optFrom(bool: Boolean): Option[Unit] = bool match {
+    case true => Some( () )
+    case false => None
+  }
+  val notations: Seq[Notation] = {
+    val maxOutputs = vec.scenario.parties.flatMap(_.inputs).max
+    val unsortedNotations: Seq[(Notation, Int)] = vec.representation.isSignaling match {
+      case true => Seq(Notation("sptable", "(Signaling) probabilities",
+        HtmlFormat.escape("$$ x= " + Tex.fromVec(vec.as(SPRepresentation)) + " $$")) -> 1,
+        Notation("sptext", "SP eq",
+          HtmlFormat.escape("x = " + vec.as(SPRepresentation).niceString), "") -> 2)
+      case false => Seq(
+        Notation("nptable", "(Non-sig.) probabilities",
+          HtmlFormat.escape("$$ x = " + Tex.fromVec(vec.as(NPRepresentation)) + " $$")) -> 1,
+        Notation("gtable", "Collins-Gisin",
+          HtmlFormat.escape("$$ x = " + Tex.fromVec(vec.as(NGRepresentation)) + " $$")) -> 1,
+        Notation("nptext", "NP eq",
+          HtmlFormat.escape("x = " + vec.as(NPRepresentation).niceString), "") -> 2,
+        Notation("gtext", "CG eq",
+          HtmlFormat.escape("x = " + vec.as(NGRepresentation).niceString), "") -> 2
+      ) ++ (maxOutputs match {
+        case 2 => Seq(
+          Notation("ctable", "Correlators",
+            HtmlFormat.escape("$$ x = " + Tex.fromVec(vec.as(NCRepresentation)) + " $$")) -> 1,
+          Notation("ctext", "Corr eq",
+            HtmlFormat.escape("x = " + vec.as(NCRepresentation).niceString), "") -> 2
+        )
+        case _ => Seq.empty[(Notation, Int)]
+      })
+    }
+    unsortedNotations.sortBy(_._2).map(_._1)
+  }
+}
 
 trait Tex {
   def toTex: String
@@ -80,7 +118,7 @@ object Tex {
     }
     rationalToTex(factor) + " " + (vec.scenario.parties.length match {
       case 0 => ""
-      case 1 => """\left ( """ + TexTable.fromNotation1(texTerms, vec.scenario, vec.representation) +  """\right )"""
+      case 1 => """\left ( """ + TexTable.fromNotation1(texTerms, vec.scenario, vec.representation).toTex +  """\right )"""
       case 2 =>
         val rows = vec.scenario.parties(0).Repr(vec.representation).size
         val cols = vec.scenario.parties(1).Repr(vec.representation).size
@@ -99,19 +137,6 @@ object Tex {
     })
   }
 }
-
-/*
-  def niceTable = {
-    scenario.parties.length match {
-      case 0 => ""
-      case 1 => """\left ( """ + TexTable.fromNotation1(texTerms, scenario, repr) +  """\right )"""
-      case 2 => {
-      }
-      case _ => {
-      }
-    }
-  }
- */
 
 object TexTable {
   def fromNotation1(row: Seq[Tex], 
