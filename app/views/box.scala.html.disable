@@ -1,5 +1,0 @@
-@(parent: String)
-
-@main("Box") {
-<p><a href="@parent">Parent folder</a></p>
-}

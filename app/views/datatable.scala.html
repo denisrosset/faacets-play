@@ -20,4 +20,10 @@
       </tr>
     }
   </tbody>
+  <tfoot>
+      @for(col <- dataTable.cols) {
+	<th>@col.title</th>
+      }
+  </tfoot>
+
 </table>
