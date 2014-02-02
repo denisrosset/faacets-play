@@ -80,7 +80,6 @@ case class DataTable(id: String, cols: Seq[DataColumn], rows: Seq[AnyRef]) {
   ))
   def columnFilterJson = JsObject(Seq(
     "sRangeFormat" -> JsString("from {from} to {to}"),
-    "bFilter" -> JsBoolean(false),
     "aoColumns" -> JsArray(cols.map(_.filter.json))
   ))
 }
