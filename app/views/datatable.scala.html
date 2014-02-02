@@ -1,0 +1,23 @@
+@(dataTable: DataTable)
+
+<table id="@dataTable.id" class="display">
+  <thead>
+      @for(col <- dataTable.cols) {
+	<th>@col.title</th>
+      }
+  </thead>
+  <tbody>
+    @for(row <- dataTable.rows) {
+      <tr>
+	@for(col <- dataTable.cols) {
+	<td>
+	  @(col.colLink) match {
+	  case Some(link) => { <a href="@(link(row))">@col.colData(row)</a> }
+	  case None => { @col.colData(row) }
+	  }
+	</td>
+	}
+      </tr>
+    }
+  </tbody>
+</table>

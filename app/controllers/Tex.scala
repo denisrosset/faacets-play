@@ -7,6 +7,7 @@ import play.api.data.Forms._
 import com.faacets._
 import impl._
 import perm._
+import spire.math.Rational
 
 sealed abstract class LineStyle {
   def rowTex: String
@@ -40,9 +41,9 @@ trait Tex {
   def toTex: String
 }
 
-case class TexTable[T <% Tex](val rows: Int, val cols: Int, val cells: Seq[Seq[T]], val rowFormat: Seq[LineStyle] = Seq.empty[LineStyle], val colFormat: Seq[LineStyle] = Seq.empty[LineStyle], val colAlign: Seq[Align] = Seq.empty[Align]) {
+case class TexTable(val rows: Int, val cols: Int, val cells: Seq[Seq[Tex]], val rowFormat: Seq[LineStyle] = Seq.empty[LineStyle], val colFormat: Seq[LineStyle] = Seq.empty[LineStyle], val colAlign: Seq[Align] = Seq.empty[Align]) {
   def toTex = {
-    def notEmptyOrElse[T](seq: Seq[T], elseValue: Seq[T]) = if (seq.isEmpty) elseValue else seq
+    def notEmptyOrElse[Tex](seq: Seq[Tex], elseValue: Seq[Tex]) = if (seq.isEmpty) elseValue else seq
     val colFormatChars = notEmptyOrElse[LineStyle](colFormat, Seq.fill(cols+1)(NoLineStyle)).map(_.colTexChar)
     val rowFormatSeq: Seq[LineStyle] = notEmptyOrElse[LineStyle](rowFormat, Seq.fill(rows+1)(NoLineStyle))
     val colAlignChars = notEmptyOrElse(colAlign, Seq.fill(cols)(Right)).map(_.texChar)
@@ -60,16 +61,64 @@ case class TexTable[T <% Tex](val rows: Int, val cols: Int, val cells: Seq[Seq[T
 }
 
 object Tex {
-
+  def fromVec(vec: GenVec): String = {
+    val repr = vec.scenario.Repr(vec.representation)
+    val terms = repr.terms.map( t => "\\text{" + t.toString + "}" )
+    val (coeffs, factor) = vec.coeffs.extractingFactor
+    def rationalToTex(r: Rational): String = {
+      if (r.denominator == 1) {
+        if (r.numerator == 1)
+          ""
+        else
+          r.numerator.toString
+      } else s"\\frac{${r.numerator}}{${r.denominator}}"
+    }
+    val texTerms = (coeffs.elements zip terms).map {
+      case (coeff, term) => new Tex {
+        def toTex = s"\\tooltip{$coeff}{$term}"
+      }
+    }
+    rationalToTex(factor) + " " + (vec.scenario.parties.length match {
+      case 0 => ""
+      case 1 => """\left ( """ + TexTable.fromNotation1(texTerms, vec.scenario, vec.representation) +  """\right )"""
+      case 2 =>
+        val rows = vec.scenario.parties(0).Repr(vec.representation).size
+        val cols = vec.scenario.parties(1).Repr(vec.representation).size
+        """\left ( """ + TexTable.fromNotation(Seq.tabulate(rows, cols)( (i,j) => texTerms(i + j * rows) ), vec.scenario, vec.representation).toTex + """\right )"""
+      case _ => 
+        val rows = vec.scenario.parties(0).Repr(vec.representation).size
+        val cols = vec.scenario.parties(1).Repr(vec.representation).size
+        val stride = rows*cols
+        val n = vec.coeffs.length / stride
+        (0 until n).map { k => 
+          val coeffs = Seq.tabulate(rows, cols)( (i,j) => texTerms(i + j * rows + k * stride) )
+          TexTable.fromNotation(coeffs, 
+            Scenario(vec.scenario.parties.take(2)), vec.representation)
+            .toTex
+        }.mkString("""\left ( """, """ \quad """, """\right )""")
+    })
+  }
 }
 
+/*
+  def niceTable = {
+    scenario.parties.length match {
+      case 0 => ""
+      case 1 => """\left ( """ + TexTable.fromNotation1(texTerms, scenario, repr) +  """\right )"""
+      case 2 => {
+      }
+      case _ => {
+      }
+    }
+  }
+ */
 
 object TexTable {
-/*
-  def fromNotation1[T <% Tex](row: Seq[T], scenario: Scenario, repr: Repr): TexTable = {
+  def fromNotation1(row: Seq[Tex], 
+    scenario: Scenario, representation: Representation): TexTable = {
     assert(scenario.parties.length == 1)
     val party = scenario.parties(0)
-    val partyRepr = repr.forParty(party)
+    val partyRepr = party.Repr(representation)
     val cols = partyRepr.size
     val colFormat = Array.fill[LineStyle](cols + 1)(NoLineStyle)
     for (sep <- partyRepr.groups.flatten.scanLeft(0)(_+_).drop(1).dropRight(1))
@@ -82,10 +131,11 @@ object TexTable {
     TexTable(1, cols, cells, rowFormat, colFormat, colAlignment)
   }
 
-  def fromNotation[T <% Tex](cells: Seq[Seq[T]], scenario: Scenario, repr: Repr): TexTable = {
+  def fromNotation(cells: Seq[Seq[Tex]], 
+    scenario: Scenario, representation: Representation): TexTable = {
     assert(scenario.parties.length == 2)
-    val rowPartyRepr = repr.forParty(scenario.parties(0))
-    val colPartyRepr = repr.forParty(scenario.parties(1))
+    val rowPartyRepr = scenario.parties(0).Repr(representation)
+    val colPartyRepr = scenario.parties(1).Repr(representation)
     val rows = rowPartyRepr.size
     val cols = colPartyRepr.size
     val colAlignment = Array.fill[Align](cols)(Right)
@@ -107,5 +157,5 @@ object TexTable {
       rowFormat(sep) = SolidLineStyle
 
     TexTable(rows, cols, cells, rowFormat, colFormat, colAlignment)
-  }*/
+  }
 }

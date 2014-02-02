@@ -1,0 +1,45 @@
+@(entry: com.faacets.impl.InequalityEntry)
+
+@import com.faacets.impl._
+<div class="row">
+  <div class="col-lg-2">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Scenario</h3>
+      </div>
+
+      <p>@(entry.inequality.bra.scenario.toString)</p>
+
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Description</h3>
+      </div>
+      <p>@((entry.inequality.shortName.toSeq ++ entry.inequality.names).mkString("/"))</p>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Cross references</h3>
+      </div>
+      <p>
+      @entry match {
+	case se: StandardEntry => {
+	@for(ce <- se.canonicalEntries) {
+	  <a href='@(Application.anyRefToPath(ce))'>#@(ce.key.toString)</a>
+	}
+	}
+	  case ce: CanonicalEntry => {
+	  @for(se <- ce.standardEntries.distinct) {
+	    <a href='@(Application.anyRefToPath(se))'>@(se.path.mkString("/").replaceAll("pubs/", ""))</a>
+	  }
+	  }
+      }
+      </p>
+    </div>
+  </div>
+</div>

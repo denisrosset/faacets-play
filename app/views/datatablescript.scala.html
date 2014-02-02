@@ -1,0 +1,9 @@
+@(dataTable: DataTable)
+
+<script type="text/javascript">
+$(document).ready(function () {
+  $('@(dataTable.sel)').
+    dataTable(@Html(dataTable.dataTableJson.toString)).
+    columnFilter(@Html(dataTable.columnFilterJson.toString));
+});
+</script>

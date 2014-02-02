@@ -1,0 +1,69 @@
+@(entry: com.faacets.impl.InequalityEntry)
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Coefficients</h3>
+      </div>
+      
+
+      <ul class="nav nav-tabs">
+	<li class="active"><a href="#canonical-1-frepr" data-toggle="tab">Full probabilities</a></li>
+	<li class=""><a href="#canonical-1-ngrepr" data-toggle="tab">Collins-Gisin</a></li>
+	<li class=""><a
+	  href="#canonical-1-ncrepr" data-toggle="tab">Correlators</a></li>
+	<li><a href="#canonical-1-frepr-eq" data-toggle="tab">FP (eq)</a></li>
+	<li><a href="#canonical-1-ngrepr-eq" data-toggle="tab">CG (eq)</a></li>
+	<li><a href="#canonical-1-ncrepr-eq" data-toggle="tab">Correlators (eq)</a></li>
+
+      </ul>
+      <div class="tab-content">
+	<div class="tab-pane active"
+	     id="canonical-1-frepr" style="overflow: auto; white-space: nowrap">
+	  $$ x = @(Tex.fromVec(entry.inequality.bra.as(com.faacets.impl.SPRepresentation))) $$
+	</div>
+	<div class="tab-pane"
+	     id="canonical-1-ngrepr" style="overflow: auto; white-space: nowrap">
+	  $$ x = @(Tex.fromVec(entry.inequality.bra.as(com.faacets.impl.NGRepresentation))) $$
+	</div>
+
+	<div class="tab-pane "
+	     id="canonical-1-ncrepr" style="overflow: auto; white-space: nowrap">
+	  $$ x = @(Tex.fromVec(entry.inequality.bra.as(com.faacets.impl.NCRepresentation))) $$
+	</div>
+	<div class="tab-pane" id="canonical-1-frepr-eq">
+	  $$ x = $$ @(entry.inequality.bra.as(com.faacets.impl.SPRepresentation).niceString) 
+	</div>
+	
+	<div class="tab-pane"
+	     id="canonical-1-ngrepr-eq">
+	  $$ x = $$  @(entry.inequality.bra.as(com.faacets.impl.NGRepresentation).niceString) 
+	</div>
+	
+	<div class="tab-pane"
+	     id="canonical-1-ncrepr-eq">
+	  $$ x =$$  @(entry.inequality.bra.as(com.faacets.impl.NCRepresentation).niceString)
+	</div>
+      </div>
+      
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Bounds</h3>
+      </div>
+      
+      <ul>
+	@for((key, value) <- entry.inequality.bounds) {
+	  <li>@(key) : @(value.toString)
+	    @if(entry.inequality.facetOf.getOrElse(key, false)) {
+	      (facet)
+	    }
+	  </li>
+	}
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,152 +1,50 @@
-@(folder: com.faacets.impl.Folder)
+@(folder: com.faacets.impl.Folder, ineqTable: DataTable)
 
 @scripts = {
-    <script src="@routes.Assets.at("javascripts/alphanum.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/jquery.dataTables.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/jquery.dataTables.columnFilter.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/alphanum.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/jquery.dataTables.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/jquery.dataTables.columnFilter.js")" type="text/javascript"></script>
 <script>
-jQuery.fn.dataTableExt.oSort['alpha-num-asc']  = function(a,b) {
-    return alphanumCase(a,b);
-};
- 
-jQuery.fn.dataTableExt.oSort['alpha-num-desc'] = function(a,b) {
-    return -alphanumCase(a,b);
-};
+ jQuery.fn.dataTableExt.oSort['alpha-num-asc']  = function(a,b) {
+   return alphanumCase(a,b);
+ };
+
+ jQuery.fn.dataTableExt.oSort['alpha-num-desc'] = function(a,b) {
+   return -alphanumCase(a,b);
+ };
 </script>
-<script type="text/javascript">
-          $(document).ready(function () {
-                $('#example').dataTable({ 
-                                                             aoColumns: [
-                                                                        { sType: "alpha-num", type: "text" },
-                                                                         { type: "text" },
-                                                                         { type: "null" },
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "number-range" },
-
-{ type: "select" },
-{ type: "select" },
-
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "number-range" },
-{ type: "text" },
-{ type: "number-range" }
-                                                                         ]
-                }).columnFilter({aoColumns:[null,null,null,null,null,null,null,null,
-				{ sSelector: "#numreprFilter", type:"number-range"  },
-				{ sSelector: "#pureFilter", type:"select", values: ["yes", "no"]},
-				{ sSelector: "#simpleFilter", type:"select", values: ["yes", "no"] }]}
-			);
-
-            });
-		</script>
+@datatablescript(ineqTable)
 }
-@main(folder.path.toString, scripts) {
- @path(folder.path) {
-<ul>
-  <li><a href="@(Application.pathToUrl(folder.parent.path))">..</a></li>
-  @for(subfolder <- folder.subfolders.values) {
-  <li><a href="@(Application.pathToUrl(subfolder.path))">@(subfolder.key)</a></li>
-  }
 
-  		<table cellspacing="0" cellpadding="0" border="0" class="display" ID="Table1">
-			<thead>
-			<tr>
-				<th>Column</th>
-				<th>Filter</th>
-				<th>Column</th>
-				<th>Filter</th>
-			</tr>
-			</thead>
-			<tbody>
-				<tr id="filter_global">
-					<td align="center">Number of representatives</td>
-					<td align="center" id="numreprFilter"></td>
-					<td align="center"></td>
-					<td align="center"></td>
-				</tr>
-				<tr id="filter_col1">
-					<td align="center">Pure</td>
-					<td align="center" id="pureFilter"></td>
-					<td align="center">Simple</td>
-					<td align="center" id="simpleFilter"></td>
-				</tr>
-			</tbody>
-		</table>
+@main(folder.path.mkString("/"), scripts) {
+@path(folder.path)
 
+@for(subfolder <- folder.subfolders.values) {
+<li><a href="@(Application.pathToUrl(subfolder.path))">@(subfolder.key)</a></li>
+}
 
-  <table id="example" class="display">
-    <thead>
-      <tr>
-	<th>Key</th>
-	<th>Name</th>
-	<th>Scenario</th>
-	<th># parties</th>
-	<th>#I &ge;</th>
-	<th>#I &le;</th>
-	<th>#O &ge;</th>
-	<th>#O &le;</th>
-	<th># repr.</th>
-	<th>Pure?</th>
-	<th>Simple?</th>
-	<th>Lift. order</th>
-	<th>Out. order</th>
-	<th>Out. in. order</th>
-	<th>Party order</th>
-	<th>1st author</th>
-	<th>Year 1st pub</th>
-      </tr>
-      </thead>
-                    <tbody>
-		        @for(inequality <- folder.inequalities.values) {
-		      <tr>
-			<td><a href="@(Application.pathToUrl(inequality.path))">@(inequality.key)</a></td>
-			<td>@(inequality.shortName)</td>
-			<td>@(inequality.scenarioInfo.text)</td>
-			<td>@(inequality.scenarioInfo.numOfParties)</td>
-			<td>@(inequality.scenarioInfo.minNumInputs)</td>
-			<td>@(inequality.scenarioInfo.maxNumInputs)</td>
-			<td>@(inequality.scenarioInfo.minNumOutputs)</td>
-			<td>@(inequality.scenarioInfo.maxNumOutputs)</td>
-			<td>@(inequality.symmetryInfo.numberOfRepresentatives)</td>
-			<td>@(if (inequality.inequality.tags.contains("pure")) "yes" else (if (inequality.inequality.tags.contains("degenerate")) "no" else ""))</td>
-			<td>@(if (inequality.inequality.tags.contains("simple")) "yes" else (if (inequality.inequality.tags.contains("composite")) "no" else ""))</td>
-			<td>@(inequality.symmetryInfo.orderOfLiftingSymmetryGroups)</td>
-			<td>@(inequality.symmetryInfo.orderOfOutputSymmetryGroup)</td>
-			<td>@(inequality.symmetryInfo.orderOfOutputInputSymmetryGroup)</td>
-			<td>@(inequality.symmetryInfo.orderOfPartySymmetryGroup)</td>
-			<td>@(inequality.firstPubInfo.firstAuthor)</td>
-			<td>@(inequality.firstPubInfo.year)</td>
-		      </tr>
-		      }
-                    </tbody>
-                    <tfoot>
-      <tr>
-	<th>Key</th>
-	<th>Name</th>
-	<th>Scenario</th>
-	<th># parties</th>
-	<th>#I &ge;</th>
-	<th>#I &le;</th>
-	<th>#O &ge;</th>
-	<th>#O &le;</th>
-	<th># repr.</th>
-	<th>Pure?</th>
-	<th>Simple?</th>
-	<th>Lift. order</th>
-	<th>Out. order</th>
-	<th>Out. in. order</th>
-	<th>Party order</th>
-	<th>1st author</th>
-	<th>Year 1st pub</th>
-      </tr>
-                    </tfoot>
-                </table>
-</ul>
+@if(!ineqTable.rows.isEmpty) {
+<div class="row">
+  <div class="col-lg-9">
+    @datatable(ineqTable)
+  </div>
+  <div class="col-lg-3">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Filters</h3>
+      </div>
+      <p><span id="keyFilter"></span></p>
+      <p><span id="liftedFilter"></span> <span id="productFilter"></span></p>
+      <table>
+	<tbody>
+	  <tr><td>Parties</td><td id="partiesFilter"></td></tr>
+	  <tr><td>Inputs</td><td id="inputsFilter"></td></tr>
+	  <tr><td>Outputs</td><td id="outputsFilter"></td></tr>
+	  <tr><td>Representatives</td><td id="reprFilter"></td></tr>
+	</tbody>
+      </table>
+    </div>
+  </div>
+</div>
 }
 }

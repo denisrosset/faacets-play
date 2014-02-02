@@ -1,0 +1,38 @@
+@(entry: com.faacets.impl.InequalityEntry)
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Symmetry group</h3>
+      </div>
+      <div><p>Symmetry group of order: @((entry.inequality.bra.scenario.finiteGroup.order/entry.symmetryInfo.numberOfRepresentatives).toString)</p>
+	<p>Generators:</p>
+	<ul>
+	  @for((name, gens) <- entry.symmetryInfo.remarkableGenerators if !gens.isEmpty) {
+	  <li>@(name) : <ul>
+	    @for(g <- gens) {
+	    <li>@(g.toString)</li>
+	    }</ul></li>
+	  }
+	</ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Sources</h3>
+      </div>
+      
+      <ul>
+	@for((key, sources) <- entry.inequality.sources) {
+	  <li>@(key):<ul>
+	    @for(source <- sources) {
+	      <li>@(Application.extractUrl(source))</li>
+	    }</ul></li>
+	}
+      </ul>
+    </div>
+  </div>
+</div>
