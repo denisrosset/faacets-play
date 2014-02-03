@@ -191,7 +191,7 @@ object Application extends Controller {
       case folder: Folder =>
         Ok(views.html.folder(folder, folderDataTable(folder)))
       case ie: InequalityEntry =>
-        Ok(views.html.inequality(ie))
+        Ok(views.html.inequalityentry(ie))
     }
   }
 

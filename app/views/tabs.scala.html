@@ -1,0 +1,17 @@
+@(tabs: Tabs)
+
+<ul class="nav nav-tabs">
+@for( tab <- tabs.tabs ) {
+  <li class="@(if(tab.id == tabs.activeId) "active" else "")">
+    <a href="#@(tab.id)" data-toggle="tab">@(tab.title)</a>
+  </li>
+}
+</ul>
+<div class="tab-content">
+@for( tab <- tabs.tabs) {
+  <div class="tab-pane@(if(tab.id == tabs.activeId) " active" else "")" id="@(tab.id)">
+    <div class="row" style="margin-top:20px"></div>
+    @(tab.content)
+  </div>
+}
+</div>

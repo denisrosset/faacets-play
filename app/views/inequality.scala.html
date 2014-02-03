@@ -1,13 +1,5 @@
 @(entry: com.faacets.impl.InequalityEntry)
 
-@scripts = {
-<script type="text/javascript" src="@routes.Assets.at("javascripts/shCore.js")"></script>
-<script type="text/javascript" src="@routes.Assets.at("javascripts/shBrushYaml.js")"></script>
-<script type="text/javascript">SyntaxHighlighter.all();</script>
-}
-
-@main(entry.path.mkString("/"), scripts) {
-@path(entry.path)
 <div>
   <ul class="nav nav-tabs">
     <li class="active"><a href="#inequality" data-toggle="tab">Inequality</a></li>
@@ -33,4 +25,3 @@
     </div>
   </div>
 </div>
-}

@@ -1,7 +1,7 @@
 @(entry: com.faacets.impl.InequalityEntry)
 
 <div class="row">
-  <div class="col-lg-8">
+  <div class="col-lg-4">
     <div class="panel">
       <div class="panel-heading">
 	<h3 class="panel-title">Symmetry group</h3>
@@ -10,10 +10,24 @@
 	<p>Generators:</p>
 	<ul>
 	  @for((name, gens) <- entry.symmetryInfo.remarkableGenerators if !gens.isEmpty) {
-	  <li>@(name) : <ul>
-	    @for(g <- gens) {
-	    <li>@(g.toString)</li>
+	    <li>@(name) : <ul>
+			      @for(g <- gens) {
+	      <li>@(g.toString)</li>
 	    }</ul></li>
+	  }
+	</ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel">
+      <div class="panel-heading">
+	<h3 class="panel-title">Extras</h3>
+      </div>
+      <div>
+	<ul>
+	  @for((key, value) <- entry.inequality.extra) {
+	    <li>@(key): @(value)</li>
 	  }
 	</ul>
       </div>
@@ -27,10 +41,10 @@
       
       <ul>
 	@for((key, sources) <- entry.inequality.sources) {
-	  <li>@(key):<ul>
-	    @for(source <- sources) {
-	      <li>@(Application.extractUrl(source))</li>
-	    }</ul></li>
+	  <li>@(key):<br/>
+			  @for(source <- sources) {
+			    @(Application.extractUrl(source))<br/>
+	  }</li>
 	}
       </ul>
     </div>
