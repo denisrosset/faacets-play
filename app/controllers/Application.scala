@@ -10,6 +10,12 @@ import impl._
 
 import play.api.libs.json._
 
+case class Tab(id: String, title: String, content: Html)
+
+case class Tabs(id: String, tabs: Seq[Tab], activeIdOption: Option[String] = None) {
+  def activeId = activeIdOption.getOrElse(tabs.head.id)
+}
+
 trait Filter {
   def json: JsValue
 }
@@ -210,17 +216,27 @@ object Application extends Controller {
 
   val wtfForm: Form[WTF] = Form(
     mapping(
-      "scenario" -> nonEmptyText,
+      "scenario" -> text,
       "coeffs" -> nonEmptyText
     )(WTF.apply)(WTF.unapply)
   )
 
-  def wtfPost = Action {
+  def wtf = Action {
     Ok(views.html.wtf(wtfForm))
   }
 
-  def wtf = Action {
-    Ok(views.html.wtf(wtfForm))
+  def wtfPost = Action { implicit request =>
+    wtfForm.bindFromRequest.fold(
+      formWithErrors => BadRequest,
+      wtfdata => {
+        val scenario = (wtfdata.scenario.trim == "") match {
+          case true => Bra.fromText(wtfdata.coeffs).scenario
+          case false => Scenario.fromText(wtfdata.scenario)
+        }
+        val bra = Bra.fromText(wtfdata.coeffs, scenario)
+        val inequality = ExplicitInequality(bra = bra).withDecomposition
+        Ok(Yaml.saveString(inequality))
+      })
   }
 
   def index = Action {

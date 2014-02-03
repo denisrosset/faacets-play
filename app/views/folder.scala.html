@@ -26,6 +26,7 @@
     @(subfolder) match {
       case sf: StandardFolder => {with @(sf.totalNumberOfInequalities) @(if(sf.totalNumberOfInequalities == 1) "inequality" else "inequalities")}
       case cf: CanonicalFolder => { }
+      case rf: RootFolder => { }
     }
   </li>
   }

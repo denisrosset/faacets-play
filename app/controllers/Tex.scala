@@ -48,12 +48,12 @@ class VecViewHelper(vec: GenVec) {
   val notations: Seq[Notation] = {
     val maxOutputs = vec.scenario.parties.flatMap(_.inputs).max
     val unsortedNotations: Seq[(Notation, Int)] = vec.representation.isSignaling match {
-      case true => Seq(Notation("sptable", "(Signaling) probabilities",
+      case true => Seq(Notation("sptable", "(Signaling) prob.",
         HtmlFormat.escape("$$ x= " + Tex.fromVec(vec.as(SPRepresentation)) + " $$")) -> 1,
         Notation("sptext", "SP eq",
           HtmlFormat.escape("x = " + vec.as(SPRepresentation).niceString), "") -> 2)
       case false => Seq(
-        Notation("nptable", "(Non-sig.) probabilities",
+        Notation("nptable", "(Non-sig.) prob.",
           HtmlFormat.escape("$$ x = " + Tex.fromVec(vec.as(NPRepresentation)) + " $$")) -> 1,
         Notation("gtable", "Collins-Gisin",
           HtmlFormat.escape("$$ x = " + Tex.fromVec(vec.as(NGRepresentation)) + " $$")) -> 1,
