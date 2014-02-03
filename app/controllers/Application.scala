@@ -239,6 +239,18 @@ object Application extends Controller {
       })
   }
 
+  def fromMarkdownFile(filename: String): Html = {
+    import java.io.File // TODO: check for unsafe key
+    import scala.io.Source
+    val content = Source.fromFile(new File(s"content/$filename")).getLines().mkString("\n")
+    val html = HtmlFormat.raw(new org.pegdown.PegDownProcessor().markdownToHtml(content))
+    html
+  }
+
+  def about = Action {
+    Ok(views.html.main("About")(fromMarkdownFile("about.md")))
+  }
+
   def index = Action {
     Ok(views.html.index("Your new application is ready."))
   }

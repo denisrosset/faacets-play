@@ -9,7 +9,8 @@ playScalaSettings
 libraryDependencies ++= Seq(
   "org.jbibtex" % "jbibtex" % "1.0.6",
   "org.yaml" % "snakeyaml" % "1.12",
-  "org.spire-math" %% "spire" % "0.7.1"
+  "org.spire-math" %% "spire" % "0.7.1",
+  "org.pegdown" % "pegdown" % "1.4.2"
 )
 
 lazy val root = project.in(file(".")).aggregate(core, polyta, alasc).dependsOn(core, polyta, alasc)

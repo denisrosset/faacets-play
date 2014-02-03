@@ -3,6 +3,7 @@ GET   /	                            controllers.Application.index
 GET   /db			    controllers.Application.dbroot
 GET   /db/*path                     controllers.Application.db(path)
 
+GET   /about			    controllers.Application.about
 GET   /wtf                          controllers.Application.wtf
 GET   /wtfpost                      controllers.Application.wtfPost
 

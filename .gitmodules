@@ -10,3 +10,6 @@
 [submodule "data"]
 	path = data
 	url = git@github.com:denisrosset/faacets-data.git
+[submodule "public/external/mathjax"]
+	path = public/external/mathjax
+	url = git://github.com/mathjax/MathJax.git

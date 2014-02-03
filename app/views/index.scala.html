@@ -1,20 +1,32 @@
 @(message: String)
 
-@main("Faacets.com") {
+@scripts = {
+}
+
+@main("Faacets.com", scripts) {
 <main class="bs-masthead" id="content" role="main">
   <div class="container">
     <span class="bs-booticon bs-booticon-lg bs-booticon-outline"><img src="@(routes.Assets.at("images/big_faacets_logo.png"))" /></span>
-    <!-- <h1>Bootstrap</h1> -->
     <p class="lead">An open collaboration platform to browse, share and process Bell and Bell-like inequalities.</p>
     <p class="lead">
-      <a href="#learn" class="btn btn-outline btn-lg">Learn about Bell inequalities</a>
+      <a href="#" onclick="return false" data-target="learn" class="animatescrollto btn btn-outline btn-lg">Learn about Bell inequalities</a>
  <a href="/about" class="btn btn-outline btn-lg">Learn about the project</a>
  <a href="/db" class="btn btn-outline btn-lg">Browse the database</a>
     </p>
   </div>
 </main>
 
-<div class="jumbotron" name="learn">
+<script type="text/javascript">
+$( '.animatescrollto' ).on('click', function(event) {
+    event.preventDefault();
+    var target = "#" + $(this).data('target');
+    $('html, body').animate({
+        scrollTop: $(target).offset().top
+    }, 1000);
+});
+</script>
+
+<div class="jumbotron" id="learn">
   <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
