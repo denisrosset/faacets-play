@@ -40,7 +40,7 @@ case object Right extends Align { def texChar = "r" }
 
 case class Notation(id: String, title: String, content: Html, style: String = "overflow: auto; white-space: nowrap")
 
-class VecViewHelper(vec: GenVec) {
+class VecViewHelper(val vec: GenVec) {
   def optFrom(bool: Boolean): Option[Unit] = bool match {
     case true => Some( () )
     case false => None

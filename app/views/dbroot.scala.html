@@ -1,0 +1,35 @@
+@(folder: com.faacets.impl.Folder, ineqTable: DataTable)
+
+@import com.faacets.impl._
+
+@main("Faacets.com") {
+@path(folder.path)
+
+<main class="bs-masthead" id="content" role="main">
+  <div class="container">
+    <span class="bs-booticon bs-booticon-lg bs-booticon-outline"><h1 style="color: #000;">Database of Bell inequalities</h3></span>
+    <p class="lead">
+      <a href="/db/canonical" class="btn btn-outline btn-lg">Canonical inequalities</a>
+      <a href="/db/pubs" class="btn btn-outline btn-lg">From the literature</a>
+      <a href="/db/solved" class="btn btn-outline btn-lg">Solved scenarios</a>
+    </p>
+  </div>
+</main>
+
+<div class="row">
+  <div class="panel">
+    @(Application.fromMarkdownFile("db.md"))
+@for(subfolder <- folder.subfolders.values) {
+  <li><a href="@(Application.pathToUrl(subfolder.path))">@(subfolder.key)</a>
+									     @(subfolder) match {
+									      case sf: StandardFolder => {with @(sf.totalNumberOfInequalities) @(if(sf.totalNumberOfInequalities == 1) "inequality" else "inequalities")}
+									      case cf: CanonicalFolder => { }
+									      case rf: RootFolder => { }
+									     }
+  </li>
+}
+  </div>
+</div>
+
+
+}

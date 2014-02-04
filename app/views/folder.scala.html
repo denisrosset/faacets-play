@@ -20,7 +20,12 @@
 
 @main(folder.path.mkString("/"), scripts) {
   @path(folder.path)
-
+@if(folder.key.toString == "pubs") {
+<h3>Published inequalities</h3>
+}
+@if(folder.key.toString == "solved") {
+<h3>Solved local polytopes for a few scenarios</h3>
+}
   @for(subfolder <- folder.subfolders.values) {
   <li><a href="@(Application.pathToUrl(subfolder.path))">@(subfolder.key)</a>
     @(subfolder) match {

@@ -1,0 +1,16 @@
+@(vvh: VecViewHelper, prefix: String)
+
+<ul class="nav nav-tabs">
+  @for((notation, index) <- vvh.notations.zipWithIndex) {
+    <li class="@(if (index == 0) "active" else "")">
+      <a href="#@(prefix)coeffs-@(notation.id)" data-toggle="tab">@(notation.title)</a>
+    </li>
+  }
+</ul>
+<div class="tab-content">
+  @for((notation, index) <- vvh.notations.zipWithIndex) {
+    <div class="tab-pane@(if (index == 0) " active" else "")" id="@(prefix)coeffs-@(notation.id)" style="@(notation.style)">
+      @(notation.content)
+    </div>
+  }
+</div>

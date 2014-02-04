@@ -130,8 +130,6 @@ object Application extends Controller {
     }
   }
 
-  def dbroot = db("")
-
   def anyRefToLifted(that: AnyRef): String = {
     val tags = that.asInstanceOf[InequalityEntry].inequality.tags
     if (tags.contains("pure"))
@@ -194,6 +192,10 @@ object Application extends Controller {
     }
   }
 
+  def dbroot = Action {
+    Ok(views.html.dbroot(root, folderDataTable(root)))
+  }
+
   val doiRegex = "doi:\\s?(10\\.\\d{4}\\/\\S+)".r
   def doiReplace(str: String) = doiRegex.replaceAllIn(str,
     m => """<a href="http://dx.doi.org/%s">%s</a>""" format (m.matched, m.matched))
@@ -221,7 +223,7 @@ object Application extends Controller {
   )
 
   def wtf = Action {
-    Ok(views.html.wtf(wtfForm))
+    Ok(views.html.wtf(wtfForm, fromMarkdownFile("syntax.md")))
   }
 
   def wtfPost = Action { implicit request =>
@@ -234,7 +236,20 @@ object Application extends Controller {
         }
         val bra = Bra.fromText(wtfdata.coeffs, scenario)
         val inequality = ExplicitInequality(bra = bra).withDecomposition
-        Ok(Yaml.saveString(inequality))
+        val vvh = new VecViewHelper(inequality.bra)
+        val indatabase: Seq[scala.Either[CanonicalEntry, VecViewHelper]] = 
+          inequality.canonical.map { ineq =>
+            val indb = root.canonical.inequalityIndex.get(ineq.bra)
+            indb match {
+              case Some(ce) => scala.Left(ce)
+              case None => scala.Right(new VecViewHelper(ineq.bra))
+            }
+          }
+        val recognized = indatabase.flatMap(_.left.toOption)
+          .map(ce => ce.key.toString.toInt -> ce).toMap
+        val other = indatabase.flatMap(_.right.toOption)
+          .zipWithIndex.map { case (vvh, ind) => (ind -> vvh) }.toMap
+        Ok(views.html.wtfresult(vvh, HtmlFormat.escape(Yaml.saveString(inequality.decomposition.get.stripped)), recognized, other))
       })
   }
 
