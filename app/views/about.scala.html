@@ -1,0 +1,26 @@
+@(content: Html)
+
+@scripts = {
+}
+
+@main("About faacets.com", scripts) {
+  <div class="row" style="margin-top:20px"></div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="btn-group-vertical">
+	<a class="btn btn-default" href="/"> &lt;- back</a>
+	<div class="btn btn-default"><em>Authors</em></div>
+	<a class="btn btn-default" href="http://www.quantumlah.org/people/jean_daniel">Jean-Daniel Bancal</a>
+	<a class="btn btn-default" href="http://cms.unige.ch/gap/quantum/wiki/members:denis_rosset">Denis Rosset</a>
+	<div class="btn btn-default"><em>Resources</em></div>
+	<a class="btn btn-default" href="http://code.faacets.com/">Software library</a>
+	<a class="btn btn-default" href="https://github.com/denisrosset/faacets">GitHub source repository</a>
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel">
+		       @content
+      </div>
+    </div>
+  </div>
+}

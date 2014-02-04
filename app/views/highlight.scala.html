@@ -1,0 +1,24 @@
+@(title: String, content: Html, highlights: Seq[Highlight])
+
+@scripts = {
+}
+
+@main(title, scripts) {
+  <div class="row" style="margin-top:20px"></div>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="btn-group-vertical">
+	<a class="btn btn-default" href="/"> &lt;- back</a>
+	@for(highlight <- highlights) {
+	<a class="btn btn-default" href="/highlight/@(highlight.id)">@(highlight.short)</a>
+	}
+      </div>
+    </div>
+    <div class="col-lg-8">
+      <div class="panel">
+	<h2>Highlight</h2>
+		       @content
+      </div>
+    </div>
+  </div>
+}

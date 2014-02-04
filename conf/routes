@@ -1,5 +1,6 @@
 GET   /	                            controllers.Application.index
 
+GET   /highlight/*id		    controllers.Application.high(id)
 GET   /db			    controllers.Application.dbroot
 GET   /db/*path                     controllers.Application.db(path)
 

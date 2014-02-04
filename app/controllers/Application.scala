@@ -10,6 +10,8 @@ import impl._
 
 import play.api.libs.json._
 
+case class Highlight(id: String, title: String, short: String)
+
 case class Tab(id: String, title: String, content: Html)
 
 case class Tabs(id: String, tabs: Seq[Tab], activeIdOption: Option[String] = None) {
@@ -95,35 +97,24 @@ case class WTF(scenario: String, coeffs: String)
 object Application extends Controller {
   val root = RootFolder(new java.io.File("data"))
 
+  val highlights = Seq(
+    Highlight("randomness", "Randomness and Bell inequalities", "Randomness"),
+    Highlight("loopholes", "Loopholes in Bell experiments", "Loopholes in experiments"),
+    Highlight("characterization", "Bell inequalities and the characterization of non-locality", "Characterization of non-locality"),
+    Highlight("freewill", "Measurement setting independence and experimental free will", "Measurement setting independence"),
+    Highlight("randi", "The quantum Randi challenge", "The quantum Randi challenge"))
+
   def pathToUrl(path: Seq[Key]) = path.toList match {
     case Nil => "/db"
     case _ => "/db/" + path.mkString("/")
   }
 
-/*  def checkWTF(scenarioString: String, coeffsString: String): Boolean = {
-    val parsedScenario = Scenario.fromTextDump(scenarioString)
-    if (parsedScenario.isEmpty)
-      return false
-    val scenario = parsedScenario.get
-    val parseResult = VecParser.parse(VecParser.bra(scenario), coeffsString)
-    parseResult.successful
-  }
-  val wtfForm = Form(
-    tuple(
-      "scenario" -> nonEmptyText,
-      "coeffsString" -> nonEmptyText
-    ) verifying("Invalid inequality", params => params match { 
-      case (scenarioString, coeffsString) => checkWTF(scenarioString, coeffsString)
-    })
-  )
-
- */
   implicit def stringToHTML(str: String) = HtmlFormat.escape(str)
 
-  def getItem(pathElements: List[Key], current: Entry = root): Entry = 
+  def getItem(pathElements: List[Key], current: Entry = root): Entry =
     (pathElements, current) match {
       case (Nil, ie: InequalityEntry) => ie
-      case (hd :: tl, ie: InequalityEntry) => 
+      case (hd :: tl, ie: InequalityEntry) =>
         throw new IllegalArgumentException("Cannot browse path past inequality")
       case (Nil, f: Folder) => f
       case (hd :: tl, f: Folder) => f.get(hd) match {
@@ -131,6 +122,14 @@ object Application extends Controller {
         case None => throw new IllegalArgumentException(s"Did not find key $hd in folder ${current.path}")
       }
     }
+
+  def high(id: String) = Action {
+    highlights.find(_.id == id) match {
+      case Some(found) => Ok(views.html.highlight(found.title, fromMarkdownFile(s"${found.id}.md"), highlights))
+      case None => NotFound
+    }
+  }
+
   def dbroot = db("")
 
   def anyRefToLifted(that: AnyRef): String = {
@@ -248,10 +247,10 @@ object Application extends Controller {
   }
 
   def about = Action {
-    Ok(views.html.main("About")(fromMarkdownFile("about.md")))
+    Ok(views.html.about(fromMarkdownFile("about.md")))
   }
 
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index(highlights))
   }
 }
