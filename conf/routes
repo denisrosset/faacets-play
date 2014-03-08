@@ -1,6 +1,7 @@
 GET   /	                            controllers.Application.index
 
 GET   /highlight/*id		    controllers.Application.high(id)
+GET   /$id<[0-9]+>                  controllers.Application.dbcanonical(id: Int)
 GET   /db			    controllers.Application.dbroot
 GET   /db/*path                     controllers.Application.db(path)
 

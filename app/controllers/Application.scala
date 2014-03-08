@@ -182,6 +182,10 @@ object Application extends Controller {
     DataTable("folder", columns, folder.inequalities.values.toSeq)
   }
 
+  def dbcanonical(id: Int) = Action {
+    Redirect(s"/db/canonical/$id")
+  }
+
   def db(pathStringSlashes: String) = Action {
     val item = getItem(pathStringSlashes.split("/").filterNot(_=="").map(Key(_)).toList)
     item match {
