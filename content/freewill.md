@@ -23,7 +23,7 @@ Second, the assumption of measurement setting independence is equivalent to assu
   <span class="figure_caption">An indecisive measurement setting makes up his mind.</span>
 </p>
 
-Third and finally, a further assumption typically used in deriving Bell inequalities is /determinism/, i.e., all measurement outcomes are predetermined.  The motivation for this assumption is that some fundamental deterministic theory underlies nature.  However, such a deterministic theory should reasonably be expected to predict /all/ physical phenomena – including the measurement settings in particular. Thus measurement setting independence is difficult to reconcile with the assumption of determinism.
+Third and finally, a further assumption typically used in deriving Bell inequalities is *determinism*, i.e., all measurement outcomes are predetermined.  The motivation for this assumption is that some fundamental deterministic theory underlies nature.  However, such a deterministic theory should reasonably be expected to predict *all* physical phenomena – including the measurement settings in particular. Thus measurement setting independence is difficult to reconcile with the assumption of determinism.
 
 #### A small degree of measurement dependence can go a long way
 
