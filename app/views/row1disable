@@ -1,0 +1,12 @@
+      @entry match {
+	case se: StandardEntry => {
+	@for(ce <- se.canonicalEntries) {
+	  <a href='@(Application.anyRefToPath(ce))'>#@(ce.key.toString)</a>
+	}
+	}
+	  case ce: CanonicalEntry => {
+	  @for(se <- ce.standardEntries.distinct) {
+	    <a href='@(Application.anyRefToPath(se))'>@(se.path.mkString("/").replaceAll("pubs/", ""))</a>
+	  }
+	  }
+      }

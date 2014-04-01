@@ -1,4 +1,4 @@
-@(entry: com.faacets.impl.InequalityEntry)
+@(bellExpression: com.faacets.BellExpression)
 
 <div class="row">
   <div class="col-lg-4">
@@ -6,10 +6,10 @@
       <div class="panel-heading">
 	<h3 class="panel-title">Symmetry group</h3>
       </div>
-      <div><p>Symmetry group of order: @((entry.inequality.bra.scenario.finiteGroup.order/entry.symmetryInfo.numberOfRepresentatives).toString)</p>
+      <div><p>Symmetry group of order: @((bellExpression.scenario.finiteGroup.order/bellExpression.symmetries.numberOfRepresentatives).toString)</p>
 	<p>Generators:</p>
 	<ul>
-	  @for((name, gens) <- entry.symmetryInfo.remarkableGenerators if !gens.isEmpty) {
+	  @for((name, gens) <- bellExpression.symmetries.remarkableGenerators if !gens.isEmpty) {
 	    <li>@(name) : <ul>
 			      @for(g <- gens) {
 	      <li>@(g.toString)</li>
@@ -26,7 +26,7 @@
       </div>
       <div>
 	<ul>
-	  @for((key, value) <- entry.inequality.extra) {
+	  @for((key, value) <- bellExpression.extra) {
 	    <li>@(key): @(value)</li>
 	  }
 	</ul>
@@ -40,7 +40,7 @@
       </div>
       
       <ul>
-	@for((key, sources) <- entry.inequality.sources) {
+	@for((key, sources) <- bellExpression.sources) {
 	  <li>@(key):<br/>
 			  @for(source <- sources) {
 			    @(Application.extractUrl(source))<br/>

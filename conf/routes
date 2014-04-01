@@ -1,13 +1,14 @@
-GET   /	                            controllers.Application.index
+GET   /	                            controllers.Text.index
 
-GET   /highlight/*id		    controllers.Application.high(id)
-GET   /$id<[0-9]+>                  controllers.Application.dbcanonical(id: Int)
+GET   /highlight/*id		    controllers.Text.high(id)
+
+#GET   /$id<[0-9]+>                  controllers.Application.dbcanonical(id: Int)
 GET   /db			    controllers.Application.dbroot
 GET   /db/*path                     controllers.Application.db(path)
 
-GET   /about			    controllers.Application.about
-GET   /wtf                          controllers.Application.wtf
-GET   /wtfpost                      controllers.Application.wtfPost
+GET   /about			    controllers.Text.about
+#GET   /wtf                          controllers.Application.wtf
+#GET   /wtfpost                      controllers.Application.wtfPost
 
 # Map static resources from the /public folder to the /assets URL path
 GET   /assets/*file                 controllers.Assets.at(path="/public", file)

@@ -1,4 +1,4 @@
-@(entry: com.faacets.impl.InequalityEntry)
+@(leaf: com.faacets.comp.PathLeaf, bellExpression: com.faacets.BellExpression)
 
 @scripts = {
 <script type="text/javascript" src="@routes.Assets.at("javascripts/shCore.js")"></script>
@@ -6,8 +6,8 @@
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 }
 
-@main(entry.path.mkString("/"), scripts) {
-@path(entry.path)
+@main(leaf.path.mkString("/"), scripts) {
+@path(leaf.path)
 
-@inequality(entry)
+@inequality(bellExpression)
 }

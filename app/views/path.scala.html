@@ -1,6 +1,4 @@
-@(path: Seq[com.faacets.impl.Key])
-@import com.faacets.impl._
-
+@(path: Seq[com.faacets.comp.Key])
 <ul class="breadcrumb">
   @for(elements <- path.reverse.tails.toList.reverse.map(_.reverse)) {
   <li><a href="@(Application.pathToUrl(elements))">@(elements.reverse.headOption.map(_.toString).getOrElse("root"))</a></li>

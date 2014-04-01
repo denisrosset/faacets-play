@@ -1,7 +1,7 @@
-@(dataTable: DataTable)
+@(table: GenDataTable)
 
 <script type="text/javascript">
 $(document).ready(function () {
-  $('@(dataTable.sel)').dataTable(@Html(dataTable.dataTableJson.toString)).columnFilter(@Html(dataTable.columnFilterJson.toString));
+  $('@(table.sel)').dataTable(@Html(table.dataTableJson.toString)).columnFilter(@Html(table.columnFilterJson.toString));
 });
 </script>

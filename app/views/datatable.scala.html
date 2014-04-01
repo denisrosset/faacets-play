@@ -1,19 +1,19 @@
-@(dataTable: DataTable)
+@(table: GenDataTable)
 
-<table id="@dataTable.id" class="display">
+<table id="@table.id" class="display">
   <thead>
-      @for(col <- dataTable.cols) {
-	<th>@col.title</th>
+      @for(colDef <- table.columnDefs) {
+	<th>@colDef.title</th>
       }
   </thead>
   <tbody>
-    @for(row <- dataTable.rows) {
+    @for(row <- table.rows) {
       <tr>
-	@for(col <- dataTable.cols) {
+	@for(cell <- row.cols) {
 	<td>
-	  @(col.colLink) match {
-	  case Some(link) => { <a href="@(link(row))">@col.colData(row)</a> }
-	  case None => { @col.colData(row) }
+	  @(cell.link) match {
+	  case Some(l) => { <a href="@(l)">@cell.html</a> }
+	  case None => { @cell.html }
 	  }
 	</td>
 	}
@@ -21,9 +21,8 @@
     }
   </tbody>
   <tfoot>
-      @for(col <- dataTable.cols) {
-	<th>@col.title</th>
+      @for(colDef <- table.columnDefs) {
+	<th>@colDef.title</th>
       }
   </tfoot>
-
 </table>

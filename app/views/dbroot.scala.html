@@ -1,9 +1,7 @@
-@(folder: com.faacets.impl.Folder, ineqTable: DataTable)
-
-@import com.faacets.impl._
+@(branch: com.faacets.comp.PathBranch)
 
 @main("Faacets.com") {
-@path(folder.path)
+@path(branch.path)
 
 <main class="bs-masthead" id="content" role="main">
   <div class="container">
@@ -18,18 +16,6 @@
 
 <div class="row">
   <div class="panel">
-    @(Application.fromMarkdownFile("db.md"))
-@for(subfolder <- folder.subfolders.values) {
-  <li><a href="@(Application.pathToUrl(subfolder.path))">@(subfolder.key)</a>
-									     @(subfolder) match {
-									      case sf: StandardFolder => {with @(sf.totalNumberOfInequalities) @(if(sf.totalNumberOfInequalities == 1) "inequality" else "inequalities")}
-									      case cf: CanonicalFolder => { }
-									      case rf: RootFolder => { }
-									     }
-  </li>
-}
+    @(Text.fromMarkdownFile("db.md"))}
   </div>
 </div>
-
-
-}

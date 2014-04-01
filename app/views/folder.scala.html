@@ -1,6 +1,4 @@
-@(folder: com.faacets.impl.Folder, ineqTable: DataTable)
-
-@import com.faacets.impl._
+@(branch: com.faacets.comp.PathBranch, subfolders: Seq[com.faacets.comp.PathBranch], table: GenDataTable)
 
 @scripts = {
 <script src="@routes.Assets.at("javascripts/alphanum.js")" type="text/javascript"></script>
@@ -15,31 +13,28 @@
    return -alphanumCase(a,b);
  };
 </script>
-@datatablescript(ineqTable)
+@datatablescript(table)
 }
 
-@main(folder.path.mkString("/"), scripts) {
-  @path(folder.path)
-@if(folder.key.toString == "pubs") {
+@main(branch.path.mkString("/"), scripts) {
+  @path(branch.path)
+
+@if(branch.path.map(_.toString) == Seq("pubs")) {
 <h3>Published inequalities</h3>
 }
-@if(folder.key.toString == "solved") {
+@if(branch.path.map(_.toString) == Seq("solved")) {
 <h3>Solved local polytopes for a few scenarios</h3>
 }
-  @for(subfolder <- folder.subfolders.values) {
-  <li><a href="@(Application.pathToUrl(subfolder.path))">@(subfolder.key)</a>
-    @(subfolder) match {
-      case sf: StandardFolder => {with @(sf.totalNumberOfInequalities) @(if(sf.totalNumberOfInequalities == 1) "inequality" else "inequalities")}
-      case cf: CanonicalFolder => { }
-      case rf: RootFolder => { }
-    }
-  </li>
+<ul>
+  @for(subfolder <- subfolders) {
+  <li><a href="@(Application.pathToUrl(branch.path :+ subfolder.key))">@(subfolder.key)</a></li>
   }
-  
-  @if(!ineqTable.rows.isEmpty) {
+</ul>
+
+  @if(!table.rows.isEmpty) {
   <div class="row">
     <div class="col-lg-10">
-			   @datatable(ineqTable)
+			   @datatable(table)
     </div>
     <div class="col-lg-2">
       <div class="panel">
@@ -47,7 +42,7 @@
 	  <h3 class="panel-title">Filters</h3>
 	</div>
 	<p><span id="keyFilter"></span></p>
-	<p><span id="liftedFilter"></span> <span id="productFilter"></span></p>
+	<p><span id="ioLiftedFilter"></span> <span id="compositeFilter"></span></p>
 	<table>
 	  <tbody>
 	    <tr>
@@ -58,9 +53,6 @@
 	    </tr>
 	    <tr>
 	      <td>Outputs</td><td id="outputsFilter"></td>
-	    </tr>
-	    <tr>
-	      <td>Repr.</td><td id="reprFilter"></td>
 	    </tr>
 	  </tbody>
 	</table>

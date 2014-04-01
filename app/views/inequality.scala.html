@@ -1,4 +1,4 @@
-@(entry: com.faacets.impl.InequalityEntry)
+@(bellExpression: com.faacets.BellExpression)
 
 <div>
   <ul class="nav nav-tabs">
@@ -9,18 +9,18 @@
   <div class="tab-content">
     <div class="tab-pane active" id="inequality">
       <div class="row" style="margin-top:20px"></div>
-      @row1(entry)
-      @row2(entry, new VecViewHelper(entry.inequality.bra))
-      @row3(entry)
+      @row1(bellExpression)
+      @row2(new VecViewHelper(bellExpression))
+      @row3(bellExpression)
     </div>
     <div class="tab-pane" id="decomposition">
 <pre class="brush: yaml">
-@(entry.inequality.decomposition.map(com.faacets.Yaml.saveString(_)).getOrElse("No decomposition available"))
+@(bellExpression.decomposition.map(com.faacets.Yaml.saveString(_)).getOrElse("No decomposition available"))
 </pre>
     </div>
     <div class="tab-pane" id="yaml">
 <pre class="brush: yaml">
-@(entry.yaml)
+@(com.faacets.Yaml.saveString(bellExpression))
 </pre>
     </div>
   </div>

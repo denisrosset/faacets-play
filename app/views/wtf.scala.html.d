@@ -22,13 +22,13 @@
 	<div class="panel-heading">
 	  <h3 class="panel-title">Try these...</h3>
 	</div>
-	<a href="#" onclick="$('#scenario').val('{[2 2] [2 2]}'); $('#coeffs').val('<A1 B1> + <A2 B1> + <A1 B2> - <A2 B2>');">
+	<a href="#" onclick="$('#scenario').val('[(2 2) (2 2)]'); $('#coeffs').val('<A1 B1> + <A2 B1> + <A1 B2> - <A2 B2>');">
 	  CHSH
 	</a>
-	<a href="#" onclick="$('#scenario').val('{[3 3] [3 3]}'); $('#coeffs').val('P_A(1|1) + P_B(1|1) - P_AB(1,1|1,1) - P_AB(1,1|2,1) - P_AB(2,1|2,1) + P_AB(2,2|1,1) - P_AB(2,2|2,1) - P_AB(1,1|1,2) + P_AB(2,1|2,2) - P_AB(1,2|1,2) - P_AB(2,2|1,2) + P_AB(1,2|2,2) + P_AB(2,2|2,2)');">
+	<a href="#" onclick="$('#scenario').val('[(3 3) (3 3)]'); $('#coeffs').val('P_A(1|1) + P_B(1|1) - P_AB(1,1|1,1) - P_AB(1,1|2,1) - P_AB(2,1|2,1) + P_AB(2,2|1,1) - P_AB(2,2|2,1) - P_AB(1,1|1,2) + P_AB(2,1|2,2) - P_AB(1,2|1,2) - P_AB(2,2|1,2) + P_AB(1,2|2,2) + P_AB(2,2|2,2)');">
 	  CGMLP
 	</a>
-	<a href="#" onclick="$('#scenario').val('{[2 2] [2 2] [2 2]}'); $('#coeffs').val('1/4 P(111|111) + 1/4 P(212|221) + 1/4 P(221|122) + 1/4 P(122|212)');">
+	<a href="#" onclick="$('#scenario').val('[(2 2) (2 2) (2 2)]'); $('#coeffs').val('1/4 P(111|111) + 1/4 P(212|221) + 1/4 P(221|122) + 1/4 P(122|212)');">
 	  Guess Your Neighbor's Input
 	</a>
       </div>

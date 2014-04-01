@@ -1,4 +1,4 @@
-@(vvh: VecViewHelper, decomposition: Html, recognized: Map[Int, com.faacets.impl.CanonicalEntry], other: Map[Int, VecViewHelper])
+@(vvh: VecViewHelper, decomposition: Html, recognized: Map[Int, (com.faacets.comp.PathLeaf, com.faacets.BellExpression)], other: Map[Int, VecViewHelper])
 
 @scripts = {
 <script type="text/javascript" src="@routes.Assets.at("javascripts/shCore.js")"></script>

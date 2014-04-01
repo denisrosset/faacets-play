@@ -1,29 +1,12 @@
-@(entry: com.faacets.impl.InequalityEntry, vvh: VecViewHelper, prefix: String = "")
+@(vvh: VecViewHelper, prefix: String = "")
 
 <div class="row">
-  <div class="col-lg-8">
+  <div class="col-lg-12">
     <div class="panel">
       <div class="panel-heading">
-	<h3 class="panel-title">Coefficients</h3>
+	<h3 class="panel-title">Bell expression and bounds</h3>
       </div>      
       @vvhview(vvh, prefix)      
-    </div>
-  </div>
-  <div class="col-lg-4">
-    <div class="panel">
-      <div class="panel-heading">
-	<h3 class="panel-title">Bounds</h3>
-      </div>
-      
-      <ul>
-	@for((key, value) <- entry.inequality.bounds) {
-	  <li>@(key) : @(value.toString)
-	    @if(entry.inequality.facetOf.getOrElse(key, false)) {
-	      (facet)
-	    }
-	  </li>
-	}
-      </ul>
     </div>
   </div>
 </div>

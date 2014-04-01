@@ -2,7 +2,7 @@ import play.Project._
 
 name := "faacets-website"
 
-version := "0.14-SNAPSHOTx"
+version := "0.14-SNAPSHOT"
 
 playScalaSettings
 
@@ -10,7 +10,8 @@ libraryDependencies ++= Seq(
   "org.jbibtex" % "jbibtex" % "1.0.6",
   "org.yaml" % "snakeyaml" % "1.12",
   "org.spire-math" %% "spire" % "0.7.1",
-  "org.pegdown" % "pegdown" % "1.4.2"
+  "org.pegdown" % "pegdown" % "1.4.2",
+  "com.typesafe.play" %% "play-slick" % "0.6.0.1"
 )
 
 lazy val root = project.in(file(".")).aggregate(core, polyta, alasc).dependsOn(core, polyta, alasc)
