@@ -115,8 +115,6 @@ object Application extends Controller {
       "coeffs" -> nonEmptyText
     )(WTF.apply)(WTF.unapply)
   )
-/*
-
   def wtf = Action {
     Ok(views.html.wtf(wtfForm, Text.fromMarkdownFile("syntax.md")))
   }
@@ -132,26 +130,9 @@ object Application extends Controller {
           case false => Scenario.fromText(wtfdata.scenario)
         }
         val expr = Expr.parseExpression(scenario)(wtfdata.coeffs)
-        val bellExpression = BellExpression(expr = expr).completed.inCompendium(c)
-        val vvh = new VecViewHelper(bellExpression)
-        val (canonicalExpressions, expressions) = bellExpression.canonicalElements(c)
-
-
-        val indatabase: Seq[scala.Either[CanonicalEntry, VecViewHelper]] = 
-          inequality.canonical.map { ineq =>
-            val indb = root.canonical.inequalityIndex.get(ineq.bra)
-            indb match {
-              case Some(ce) => scala.Left(ce)
-              case None => scala.Right(new VecViewHelper(ineq.bra))
-            }
-          }
-        val recognized = indatabase.flatMap(_.left.toOption)
-          .map(ce => ce.key.toString.toInt -> ce).toMap
-        val other = indatabase.flatMap(_.right.toOption)
-          .zipWithIndex.map { case (vvh, ind) => (ind -> vvh) }.toMap
-        Ok(views.html.wtfresult(vvh, HtmlFormat.escape(Yaml.saveString(inequality.decomposition.get.stripped)), recognized, other))
-
+        val dec = BellExpression(expr = expr).withRemarkableMaximal.withDecomposition.decomposition.get.inCompendium(c)
+        val (graph, _) = DecToGraph(c, dec, Some("Your expression"))
+        Ok(views.html.wtfresult(graph))
       })
   }
-*/
 }
