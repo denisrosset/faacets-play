@@ -5,7 +5,6 @@ import comp._
 import dec._
 import pretty._
 import PrettyImplicits._
-import PrettyParams.Default._
 
 case class GraphNode(id: Int, label: String, link: Option[String], tex: String)
 case class GraphEdge(from: Int, onto: Int, label:String, tooltip: Option[String])
@@ -20,6 +19,7 @@ object Graph {
 
 object DecToGraph {
   def apply(c: CanonicalComp, d: Decomposition, forceLabel: Option[String], graph: Graph = Graph.empty)(implicit session: c.CompSession): (Graph, Int) = {
+    implicit val prettyParams = PrettyParams(true, None, Center)
     val thisBE = d.fromCompendium(c).compute
     val (thisLabel, thisLink) = (d, thisBE.shortName) match {
       case (CanonicalExpression(index), Some(sn)) => (sn, Some(s"/$index"))
@@ -27,7 +27,7 @@ object DecToGraph {
       case _ => (thisBE.scenario.toText, None)
     }
     val thisFinalLabel = forceLabel.getOrElse(thisLabel)
-    val thisTeX = tex(thisBE.expr.tensor)
+    val thisTeX = s"\\text{in scenario ${thisBE.scenario.toText} written using ${thisBE.representation.toText} } \\\\ \\left (" + tex(thisBE.expr.tensor) + " \\right )"
     val thisID = graph.nextID
     val thisNode = GraphNode(thisID, thisFinalLabel, thisLink, thisTeX)
     val graphWithThis = graph.copy(nodes = graph.nodes :+ thisNode)

@@ -2,6 +2,15 @@
 
 @scripts = {
 <style>
+ .tooltipsy
+ {
+   padding: 10px;
+   max-width: 200px;
+   color: #303030;
+   background-color: #eeeeee;
+   border: 1px solid #333333;
+ }
+
 svg {
     overflow: hidden;
 }
@@ -24,20 +33,40 @@ svg {
 </style>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/shCore.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/shBrushYaml.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/tooltipsy.min.js")"></script>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://cpettitt.github.io/project/dagre-d3/v0.1.5/dagre-d3.min.js"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/dagre-d3.js")"></script>
+<script type="text/javascript">
+
+function showOnly(id) {
+   @for(n <- graph.nodes) {
+     if (@(n.id) === id)
+        $('#tex@(n.id)').show();
+     else
+        $('#tex@(n.id)').hide();
+   }
+}
+</script>
 <script type="text/javascript">
  $(function() {
    
    // Create a new directed graph
    var g = new dagreD3.Digraph();
    @for(n <- graph.nodes) {
-     g.addNode("expr@(n.id)", { label: "@(n.label)" });
+     g.addNode("expr@(n.id)", { label: "<div style='padding:10px'><a href='#' onclick='showOnly(@(n.id))'>@(n.label)</a></div>" });
    }
    
    @for(e <- graph.edges) {
-     g.addEdge(null, "expr@(e.from)", "expr@(e.onto)", { label: "@(e.label)" });
+     @e.tooltip match {
+       case Some(text) => {
+	   g.addEdge(null, "expr@(e.from)", "expr@(e.onto)", { label: "<span class='hastip' title='@(text)'>@(e.label)</span>" });
+}
+
+case None => {	 
+g.addEdge(null, "expr@(e.from)", "expr@(e.onto)", { label: "@(e.label)" });
+       }
+     }
    }
    
    var renderer = new dagreD3.Renderer();
@@ -46,6 +75,7 @@ svg {
    d3.select("svg")
      .attr("width", layout.graph().width + 40)
 			  .attr("height", layout.graph().height + 40);
+     $('.hastip').tooltipsy({delay: 0, offset: [10, 0]});
 });
 </script>
 }
@@ -70,7 +100,11 @@ svg {
       <div class="panel-heading">
 	<h3 class="panel-title">Bell expression</h3>
       </div>
-
+   @for(n <- graph.nodes) {
+     <div id='tex@(n.id)' style='display:none; overflow:auto; white-space: nowrap'>
+       $$  @(n.tex) $$
+     </div>
+   }
     </div>
   </div>
 </div>
