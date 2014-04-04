@@ -16,7 +16,9 @@
 <div class="row" style="margin-top:20px"></div>
   <ul class="nav nav-tabs">
     <li class="active"><a href='@(Application.pathToUrl(leaf.path))'>Bell Expression</a></li>
+    @if(!bellExpression.decomposition.isEmpty) {
     <li><a href='@(Application.pathToUrl(leaf.path)+".decomposition")'>Decomposition</a></li>
+    }
     <li><a href='@(Application.pathToUrl(leaf.path)+".yaml")'>Yaml source</a></li>
   </ul>
   <div class="row" style="margin-top:20px"></div>

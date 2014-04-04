@@ -113,7 +113,8 @@ object Application extends Controller {
 
     def showExpressionYAML(leaf: PathLeaf) = {
       val yaml = c.readYAML(leaf)
-      Ok(views.html.expressionyaml(leaf, yaml))
+      val be = Yaml.loadString[BellExpression](yaml)
+      Ok(views.html.expressionyaml(leaf, yaml, be.decomposition.isEmpty))
     }
 
     val (pathStringSlashes, display) = pathStringSlashesDisplay.split('.') match {
