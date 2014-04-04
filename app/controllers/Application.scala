@@ -8,8 +8,6 @@ import play.api.data.Forms._
 import com.faacets._
 import com.faacets.db._
 import comp._
-import disk._
-
 
 case class Highlight(id: String, title: String, short: String)
 
@@ -47,23 +45,23 @@ object Application extends Controller {
   def branchDataTable(c: DBDiskSplitComp, branch: PathBranch)(implicit session: DBSession) = {
     val digests = c.readDigests(branch)
 
-    /*
-     def toRefs(that: AnyRef): Html = that match {
-     case ie: StandardEntry => // TODO: refactor to avoid injection attacks
-     HtmlFormat.raw(ie.canonicalEntries.map(entry => "<a href='" + anyRefToPath(entry) + "'>#" + entry.key.toString + "</a>").mkString(" "))
-     case _ => ""
-     }
+    def canonicalKeysToHtml(keys: Seq[Int]) =
+      HtmlFormat.raw(keys.map(index => "<a href='" + pathToUrl(Seq(Key("canonical"),Key(index))) + "'>#" + index.toString + "</a>").mkString(" "))
 
-     val crossColumns: Seq[DataColumn] = folder match {
-     case f: StandardFolder =>
-     Seq(DataColumn("Canonical", toRefs, sorting = AlphaNumSorting))
-     case _ => Seq.empty[DataColumn]
-     }*/
     val path = c.fullPath(branch)
+    val crossColumn = path.map(_.toString) match {
+      case Seq("canonical") => None
+      case _ => 
+        Some(DataColumnDef[(Key, BEDigest)]("Canonical", 
+          pair => canonicalKeysToHtml(pair._2.canonicalKeys),
+          sorting = AlphaNumSorting))
+    }
+
     def booleanToString(b: Boolean) = b match {
       case true => "yes"
       case false => "no"
     }
+
     val columnDefs = Seq(
       DataColumnDef[(Key, BEDigest)]("Key", _._1.toString, sorting = AlphaNumSorting, StringFilter("#keyFilter"), Some(pair => pathToUrl(path :+ pair._1))),
       DataColumnDef[(Key, BEDigest)]("Scenario", _._2.scenario.toText,
@@ -78,25 +76,57 @@ object Application extends Controller {
       //      sorting = NumericSorting, filter = NumberRangeFilter("#reprFilter")),
       DataColumnDef[(Key, BEDigest)]("IO-Lifted?", pair => booleanToString(pair._2.isIOLifted), sorting = StringSorting, filter = SelectFilter("#ioLiftedFilter", Seq("yes", "no"))),
       DataColumnDef[(Key, BEDigest)]("Composite?", pair => booleanToString(pair._2.isComposite), sorting = StringSorting, filter = SelectFilter("#compositeFilter", Seq("yes", "no")))
-    )
-    /*,
+    ) ++ crossColumn
+    /*, TODO
      DataColumn("1st pub", ie(_).firstPubInfo.year.toString, sorting = NumericSorting),
      DataColumn("1st author", ie(_).firstPubInfo.firstAuthor, sorting = StringSorting)
-     ) ++ crossColumns*/
+     ) */
     DataTable("branch", columnDefs, c.readDigests(branch).toSeq)
   }
 
-  def db(pathStringSlashes: String) = DBAction { implicit request =>
+  def db(pathStringSlashesDisplay: String) = DBAction { implicit request =>
     implicit val s = request.dbSession
-    val path = pathStringSlashes.split("/").filterNot(_=="").map(Key(_)).toSeq
     val c = compendium(s)
+
+    def showBranch(branch: PathBranch) = 
+      Ok(views.html.folder(branch, c.branches(branch).toSeq.sortBy(_.key), branchDataTable(c, branch)))
+
+    def showExpressionDisplay(leaf: PathLeaf) = {
+      val be = c.read(leaf)
+      val crossRefs = leaf.path.map(_.toString) match {
+        case Seq("canonical", _) =>
+          val leaves = c.readCrossRefsCanonicalIndex(leaf.key.intOption.get).distinct
+          leaves.map(l => (l.path.mkString("/") -> pathToUrl(l.path)))
+        case _ =>
+          val canonicalIndices = c.readCrossRefsLeaf(leaf)
+          canonicalIndices.map(index => ("#" + index.toString -> pathToUrl(Seq(Key("canonical"), Key(index)))))
+      }
+      Ok(views.html.expressiondisplay(leaf, be, crossRefs))
+    }
+
+    def showExpressionDecomposition(leaf: PathLeaf) = {
+      val be = c.read(leaf)
+      val dec = be.decomposition.get.inCompendium(c)
+      val (graph, _) = DecToGraph(c, dec, Some(leaf.path.mkString("/")))
+      Ok(views.html.expressiondecomposition(leaf, graph))
+    }
+
+    def showExpressionYAML(leaf: PathLeaf) = {
+      val yaml = c.readYAML(leaf)
+      Ok(views.html.expressionyaml(leaf, yaml))
+    }
+
+    val (pathStringSlashes, display) = pathStringSlashesDisplay.split('.') match {
+      case Array(pss, d) => (pss, d)
+      case Array(pss) => (pss, "display")
+    }
+    val path = pathStringSlashes.split("/").filterNot(_=="").map(Key(_)).toSeq
     val node = c.nodeFromPath(path)
-    node match {
-      case branch: PathBranch =>
-        Ok(views.html.folder(branch, c.branches(branch).toSeq, branchDataTable(c, branch)))
-      case leaf: PathLeaf =>
-        val be = c.read(leaf)
-        Ok(views.html.inequalityentry(leaf, be))
+    (node, display) match {
+      case (branch: PathBranch, _) => showBranch(branch)
+      case (leaf: PathLeaf, "decomposition") => showExpressionDecomposition(leaf)
+      case (leaf: PathLeaf, "yaml") => showExpressionYAML(leaf)
+      case (leaf: PathLeaf, _) => showExpressionDisplay(leaf)
     }
   }
 

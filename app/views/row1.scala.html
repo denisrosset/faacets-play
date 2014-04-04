@@ -1,4 +1,4 @@
-@(bellExpression: com.faacets.BellExpression)
+@(bellExpression: com.faacets.BellExpression, crossRefs: Seq[(String, String)])
 
 <div class="row">
   <div class="col-lg-2">
@@ -25,8 +25,9 @@
       <div class="panel-heading">
 	<h3 class="panel-title">Cross references</h3>
       </div>
-      <p>
-      </p>
+      @for((title, link) <- crossRefs) {
+	<a href='@(link)'>@(title)</a>
+      }
     </div>
   </div>
 </div>

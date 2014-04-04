@@ -1,0 +1,27 @@
+@(leaf: com.faacets.comp.PathLeaf, yaml: String)
+
+@scripts = {
+<script type="text/javascript" src="@routes.Assets.at("javascripts/shCore.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/shBrushYaml.js")"></script>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+}
+
+@main(leaf.path.mkString("/"), scripts) {
+@path(leaf.path)
+
+<div>
+  <div class="row" style="margin-top:20px"></div>
+  <ul class="nav nav-tabs">
+    <li><a href='@(Application.pathToUrl(leaf.path))'>Bell Expression</a></li>
+    <li><a href='@(Application.pathToUrl(leaf.path)+".decomposition")'>Decomposition</a></li>
+    <li class="active"><a href='@(Application.pathToUrl(leaf.path)+".yaml")'>Yaml source</a></li>
+  </ul>
+  <div class="row" style="margin-top:20px"></div>
+<div id="decomposition">
+<pre class="brush: yaml">
+@yaml
+</pre>
+</div>
+  </div>
+</div>
+}

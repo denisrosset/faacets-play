@@ -1,4 +1,4 @@
-@(graph: Graph)
+@(leaf: com.faacets.comp.PathLeaf, graph: Graph)
 
 @scripts = {
 <style>
@@ -80,31 +80,41 @@ g.addEdge(null, "expr@(e.from)", "expr@(e.onto)", { label: "@(e.label)" });
 </script>
 }
 
-@main("Expression decomposition", scripts) {
-<div class="row" style="margin-top:20px"></div>
+@main(leaf.path.mkString("/"), scripts) {
+@path(leaf.path)
 
-<div class="row">
-  <div class="col-lg-6">
-    <div class="panel">
-      <div class="panel-heading">
-	<h3 class="panel-title">Decomposition</h3>
+<div>
+  <div class="row" style="margin-top:20px"></div>
+  <ul class="nav nav-tabs">
+    <li><a href='@(Application.pathToUrl(leaf.path))'>Bell Expression</a></li>
+    <li class="active"><a href='@(Application.pathToUrl(leaf.path)+".decomposition")'>Decomposition</a></li>
+    <li><a href='@(Application.pathToUrl(leaf.path)+".yaml")'>Yaml source</a></li>
+  </ul>
+  <div class="row" style="margin-top:20px"></div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="panel">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Decomposition</h3>
+	</div>
+	
+	<svg width=650 height=680>
+	  <g transform="translate(20,20)"/>
+	</svg>
       </div>
-
-      <svg width=650 height=680>
-	<g transform="translate(20,20)"/>
-      </svg>
     </div>
-  </div>
-  <div class="col-lg-6">
-    <div class="panel">
-      <div class="panel-heading">
-	<h3 class="panel-title">Bell expression</h3>
+    <div class="col-lg-6">
+      <div class="panel">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Bell expression</h3>
+	</div>
+	      @for(n <- graph.nodes) {
+	<div id='tex@(n.id)' style='display:none; overflow:auto; white-space: nowrap'>
+										      $$  @(n.tex) $$
+	</div>
+	      }
       </div>
-   @for(n <- graph.nodes) {
-     <div id='tex@(n.id)' style='display:none; overflow:auto; white-space: nowrap'>
-       $$  @(n.tex) $$
-     </div>
-   }
     </div>
   </div>
 </div>

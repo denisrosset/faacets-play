@@ -4,7 +4,6 @@ import com.faacets._
 import comp._
 import dec._
 import pretty._
-import PrettyImplicits._
 
 case class GraphNode(id: Int, label: String, link: Option[String], tex: String)
 case class GraphEdge(from: Int, onto: Int, label:String, tooltip: Option[String])
@@ -27,7 +26,7 @@ object DecToGraph {
       case _ => (thisBE.scenario.toText, None)
     }
     val thisFinalLabel = forceLabel.getOrElse(thisLabel)
-    val thisTeX = s"\\text{in scenario ${thisBE.scenario.toText} written using ${thisBE.representation.toText} } \\\\ \\left (" + tex(thisBE.expr.tensor) + " \\right )"
+    val thisTeX = s"\\text{in ${thisBE.scenario.toText} using ${thisBE.representation.toText} } \\\\ \\left (" + tex(thisBE.expr.tensor) + " \\right )"
     val thisID = graph.nextID
     val thisNode = GraphNode(thisID, thisFinalLabel, thisLink, thisTeX)
     val graphWithThis = graph.copy(nodes = graph.nodes :+ thisNode)
