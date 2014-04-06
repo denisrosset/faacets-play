@@ -7,18 +7,6 @@
       }
   </thead>
   <tbody>
-    @for(row <- table.rows) {
-      <tr>
-	@for(cell <- row.cols) {
-	<td>
-	  @(cell.link) match {
-	  case Some(l) => { <a href="@(l)">@cell.html</a> }
-	  case None => { @cell.html }
-	  }
-	</td>
-	}
-      </tr>
-    }
   </tbody>
   <tfoot>
       @for(colDef <- table.columnDefs) {

@@ -43,6 +43,9 @@ object Application extends Controller {
   }
 
   def branchDataTable(c: DBDiskSplitComp, branch: PathBranch)(implicit session: DBSession) = {
+    import play.api.libs.json._
+
+    val ajaxUrl = pathToUrl(branch.path) + ".json"
     val digests = c.readDigests(branch)
 
     def canonicalKeysToHtml(keys: Seq[Int]) =
@@ -54,6 +57,7 @@ object Application extends Controller {
       case _ => 
         Some(DataColumnDef[(Key, BEDigest)]("Canonical", 
           pair => canonicalKeysToHtml(pair._2.canonicalKeys),
+          pair => JsString(canonicalKeysToHtml(pair._2.canonicalKeys).body),
           sorting = AlphaNumSorting))
     }
 
@@ -63,30 +67,55 @@ object Application extends Controller {
     }
 
     val columnDefs = Seq(
-      DataColumnDef[(Key, BEDigest)]("Key", _._1.toString, sorting = AlphaNumSorting, StringFilter("#keyFilter"), Some(pair => pathToUrl(path :+ pair._1))),
-      DataColumnDef[(Key, BEDigest)]("Scenario", _._2.scenario.toText,
+      DataColumnDef[(Key, BEDigest)]("Key", 
+        _._1.toString, p => JsString(p._1.toString),
+        sorting = AlphaNumSorting, StringFilter("#keyFilter"), Some(pair => pathToUrl(path :+ pair._1))),
+      DataColumnDef[(Key, BEDigest)]("Scenario", 
+        _._2.scenario.toText, p => JsString(p._2.scenario.toText),
         sorting = StringSorting),
-      DataColumnDef[(Key, BEDigest)]("#P", _._2.scenario.numOfParties.toString,
+      DataColumnDef[(Key, BEDigest)]("#P", 
+        _._2.scenario.numOfParties.toString, p => JsNumber(p._2.scenario.numOfParties),
         sorting = NumericSorting, filter = NumberRangeFilter("#partiesFilter")),
-      DataColumnDef[(Key, BEDigest)]("#I", _._2.scenario.maxNumInputs.toString,
+      DataColumnDef[(Key, BEDigest)]("#I", 
+        _._2.scenario.maxNumInputs.toString, p => JsNumber(p._2.scenario.maxNumInputs),
         sorting = NumericSorting, filter = NumberRangeFilter("#inputsFilter")),
-      DataColumnDef[(Key, BEDigest)]("#O", _._2.scenario.maxNumOutputs.toString,
+      DataColumnDef[(Key, BEDigest)]("#O", 
+        _._2.scenario.maxNumOutputs.toString, p => JsNumber(p._2.scenario.maxNumOutputs),
         sorting = NumericSorting, filter = NumberRangeFilter("#outputsFilter")),
       //      DataColumn("#reprs", ie(_).symmetryInfo.numberOfRepresentatives.toString,
       //      sorting = NumericSorting, filter = NumberRangeFilter("#reprFilter")),
-      DataColumnDef[(Key, BEDigest)]("IO-Lifted?", pair => booleanToString(pair._2.isIOLifted), sorting = StringSorting, filter = SelectFilter("#ioLiftedFilter", Seq("yes", "no"))),
-      DataColumnDef[(Key, BEDigest)]("Composite?", pair => booleanToString(pair._2.isComposite), sorting = StringSorting, filter = SelectFilter("#compositeFilter", Seq("yes", "no")))
+      DataColumnDef[(Key, BEDigest)]("IO-Lifted?", 
+        p => booleanToString(p._2.isIOLifted), p => JsString(booleanToString(p._2.isIOLifted)),
+        sorting = StringSorting, filter = SelectFilter("#ioLiftedFilter", Seq("yes", "no"))),
+      DataColumnDef[(Key, BEDigest)]("Composite?", 
+        p => booleanToString(p._2.isComposite), p => JsString(booleanToString(p._2.isComposite)),
+        sorting = StringSorting, filter = SelectFilter("#compositeFilter", Seq("yes", "no")))
     ) ++ crossColumn
     /*, TODO
      DataColumn("1st pub", ie(_).firstPubInfo.year.toString, sorting = NumericSorting),
      DataColumn("1st author", ie(_).firstPubInfo.firstAuthor, sorting = StringSorting)
      ) */
-    DataTable("branch", columnDefs, c.readDigests(branch).toSeq)
+    DataTable("branch", ajaxUrl, columnDefs, c.readDigests(branch).toSeq)
   }
 
-  def db(pathStringSlashesDisplay: String) = DBAction { implicit request =>
+  def db(pathStringSlashesDisplay: String, sEcho: Option[String]) = DBAction { implicit request =>
+    import play.api.libs.json._
+
     implicit val s = request.dbSession
     val c = compendium(s)
+
+    def showBranchJson(branch: PathBranch) = {
+      val dt = branchDataTable(c, branch)
+      val json = JsObject(Seq(
+        "iTotalRecords" -> JsNumber(dt.rows.length),
+        "iTotalDisplayRecords" -> JsNumber(dt.rows.length),
+        "aaData" -> JsArray(dt.rows.map { row =>
+          val data: Seq[JsValue] = row.cols.map(_.json)
+          JsArray(data)
+        })
+      ) ++ sEcho.map(echo => ("sEcho" -> JsString(echo.toInt.toString))).toSeq)
+      Ok(json)
+    }
 
     def showBranch(branch: PathBranch) = 
       Ok(views.html.folder(branch, c.branches(branch).toSeq.sortBy(_.key), branchDataTable(c, branch)))
@@ -124,6 +153,7 @@ object Application extends Controller {
     val path = pathStringSlashes.split("/").filterNot(_=="").map(Key(_)).toSeq
     val node = c.nodeFromPath(path)
     (node, display) match {
+      case (branch: PathBranch, "json") => showBranchJson(branch)
       case (branch: PathBranch, _) => showBranch(branch)
       case (leaf: PathLeaf, "decomposition") => showExpressionDecomposition(leaf)
       case (leaf: PathLeaf, "yaml") => showExpressionYAML(leaf)

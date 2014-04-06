@@ -10,6 +10,7 @@ import spire.math.Rational
 import pretty._
 
 trait Notation {
+  implicit val prettyParams = PrettyParams(true, Some(4), Center)
   def id: String
   def title: String
   def content: Html = HtmlFormat.escape("$$ " + texContent + " $$")
@@ -18,7 +19,6 @@ trait Notation {
   def bellExpression: BellExpression
   def prettifiedExpr: Prettified
   def style: String = "overflow: auto; white-space: nowrap"
-  implicit val prettyParams = PrettyParams(true, Some(4), Center)
 }
 
 case class SPTable(bellExpression: BellExpression) extends Notation {
