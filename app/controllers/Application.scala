@@ -57,31 +57,26 @@ object Application extends Controller {
     def canonicalKeysToHtml(keys: Seq[Int]) =
       HtmlFormat.raw(keys.map(index => "<a href='" + pathToUrl(Seq(Key("canonical"),Key(index))) + "'>#" + index.toString + "</a>").mkString(" "))
 
-    object dataset extends DataTablesDataset with SeqDataset {
-      type Record = (Key, BEDigest)
+    object dataset extends DataTablesDataset with SlickDataset {
+      type Record = (Node, DBExpression, ScenarioInfo)
 
       val rangeFormat = "{from} to {to}"
 
-      class StringCol(val title: String, val recordToData: (Record => String)) extends StringDataTablesSortFront[String] with StringSeqSortBack[String] {
+      class StringCol(val title: String, val recordToData: (Record => String)) extends StringDataTablesSortFront[String] with SlickCol[String] {
         val dataToJson = JsString(_)
         val dataToSort = identity[String](_)
       }
 
-      trait StringFilter extends StringContainsSeqFiltBack[String] with TextDataTablesFiltFront[String] {
-        val dataToFilt = identity[String](_)
-      }
+      trait StringFilter extends TextDataTablesFiltFront[String] {
 
-      class IntCol(val title: String, val recordToData: (Record => Int)) extends NumericSeqSortBack[Int] with NumericDataTablesSortFront[Int] {
+      class IntCol(val title: String, val recordToData: (Record => Int)) extends SlickCol[Int] with NumericDataTablesSortFront[Int] {
         val dataToJson: (Int => JsValue) = JsNumber(_)
         val dataToSort = identity[Int](_)
       }
 
-      trait IntRangeFilter extends NumberRangeDataTablesFiltFront[Int] with NumberRangeSeqFiltBack[Int] {
-        val dataToFilt = identity[Int](_)
-      }
+      trait IntRangeFilter extends NumberRangeDataTablesFiltFront[Int]
 
-      trait BooleanFilter extends SelectDataTablesFiltFront[String, String] with StringIsSeqFiltBack[String] {
-        val dataToFilt = identity[String](_)
+      trait BooleanFilter extends SelectDataTablesFiltFront[String, String] {
         val stringToCond = identity[String](_)
         val selectValues = Seq("yes", "no")
       }
@@ -89,17 +84,38 @@ object Application extends Controller {
       object KeyCol extends StringCol("Key", _._1.toString) with StringFilter {
         val sSelector = "#keyFilter"
         override val dataToJson: (String => JsString) = (keyString => JsString("<a href='" + pathToUrl(path :+ Key(keyString)) + "'>" + keyString + "</a>"))
-        override val ordering = AlphaNumOrdering
+        def performFilt(q: Query, cond: String)(implicit session: DatasetSession) = q.filter(_._1.stringKey like "%" + cond + "%")
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._1.intKey.asc).sortBy(_._1.stringKey.asc)
+          case Desc => q.sortBy(_._1.intKey.desc).sortBy(_._1.stringKey.desc)
+        }
       }
       
-      object ScenarioCol extends StringCol("Scenario", _._2.scenario.toText)
+      object ScenarioCol extends StringCol("Scenario", _._3.text) {
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._3.text.asc)
+          case Desc => q.sortBy(_._3.text.desc)
+        }
+      }
 
       object NumPCol extends IntCol("#P", _._2.scenario.numOfParties) with IntRangeFilter {
         val sSelector = "#partiesFilter"
+        def performFilt(q: Query, cond: (Option[Int], Option[Int]))(implicit session: DatasetSession) = cond match {
+          case (None, None) => q
+          case (Some(lb), None) => q.filter(_.age >= lb)
+          case (None, Some(ub)) => q.filter(_.age <= ub)
+          case (Some(lb), Some(ub)) => q.filter(_.age >= lb).filter(_.age <= ub)
+        }
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._3.text.asc)
+          case Desc => q.sortBy(_._3.text.desc)
+        }
       }
+
       object NumICol extends IntCol("#I", _._2.scenario.maxNumInputs) with IntRangeFilter {
         val sSelector = "#inputsFilter"
       }
+
       object NumOCol extends IntCol("#O", _._2.scenario.maxNumOutputs) with IntRangeFilter {
         val sSelector = "#outputsFilter"
       }
