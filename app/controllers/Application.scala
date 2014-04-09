@@ -44,6 +44,12 @@ object Application extends Controller {
 
   def branchDataTable(c: DBDiskSplitComp, branch: PathBranch)(implicit session: DBSession) = {
     import play.api.libs.json._
+    import DBConfig.driver.simple._
+    import DBConfig.driver.simple.{Query => SlickQuery}
+
+    val c = compendium(session)
+
+    val branchID: Int = c.indexComp.nodeFromPath(branch.path).id.get
 
     implicit val unit = ()
 
@@ -57,19 +63,24 @@ object Application extends Controller {
     def canonicalKeysToHtml(keys: Seq[Int]) =
       HtmlFormat.raw(keys.map(index => "<a href='" + pathToUrl(Seq(Key("canonical"),Key(index))) + "'>#" + index.toString + "</a>").mkString(" "))
 
+    import com.faacets.db._
+    import c.indexComp.{Nodes, Expressions, ScenarioInfos}
+
     object dataset extends DataTablesDataset with SlickDataset {
-      type Record = (Node, DBExpression, ScenarioInfo)
+      type Record = (DatabaseNode, DBExpression, ScenarioInfo)
+      type LiftedRecord = (Nodes, Expressions, ScenarioInfos)
+      type Query = SlickQuery[LiftedRecord, Record]
 
       val rangeFormat = "{from} to {to}"
 
-      class StringCol(val title: String, val recordToData: (Record => String)) extends StringDataTablesSortFront[String] with SlickCol[String] {
+      abstract class StringCol(val title: String, val recordToData: (Record => String)) extends StringDataTablesSortFront[String] with SlickCol[String] {
         val dataToJson = JsString(_)
         val dataToSort = identity[String](_)
       }
 
-      trait StringFilter extends TextDataTablesFiltFront[String] {
+      trait StringFilter extends TextDataTablesFiltFront[String]
 
-      class IntCol(val title: String, val recordToData: (Record => Int)) extends SlickCol[Int] with NumericDataTablesSortFront[Int] {
+      abstract class IntCol(val title: String, val recordToData: (Record => Int)) extends SlickCol[Int] with NumericDataTablesSortFront[Int] {
         val dataToJson: (Int => JsValue) = JsNumber(_)
         val dataToSort = identity[Int](_)
       }
@@ -81,7 +92,7 @@ object Application extends Controller {
         val selectValues = Seq("yes", "no")
       }
 
-      object KeyCol extends StringCol("Key", _._1.toString) with StringFilter {
+      object KeyCol extends StringCol("Key", _._1.key.toString) with StringFilter {
         val sSelector = "#keyFilter"
         override val dataToJson: (String => JsString) = (keyString => JsString("<a href='" + pathToUrl(path :+ Key(keyString)) + "'>" + keyString + "</a>"))
         def performFilt(q: Query, cond: String)(implicit session: DatasetSession) = q.filter(_._1.stringKey like "%" + cond + "%")
@@ -98,46 +109,87 @@ object Application extends Controller {
         }
       }
 
-      object NumPCol extends IntCol("#P", _._2.scenario.numOfParties) with IntRangeFilter {
+      object NumPCol extends IntCol("#P", _._3.numOfParties) with IntRangeFilter {
         val sSelector = "#partiesFilter"
         def performFilt(q: Query, cond: (Option[Int], Option[Int]))(implicit session: DatasetSession) = cond match {
           case (None, None) => q
-          case (Some(lb), None) => q.filter(_.age >= lb)
-          case (None, Some(ub)) => q.filter(_.age <= ub)
-          case (Some(lb), Some(ub)) => q.filter(_.age >= lb).filter(_.age <= ub)
+          case (Some(lb), None) => q.filter(_._3.numOfParties >= lb)
+          case (None, Some(ub)) => q.filter(_._3.numOfParties <= ub)
+          case (Some(lb), Some(ub)) => q.filter(_._3.numOfParties >= lb).filter(_._3.numOfParties <= ub)
         }
         def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
-          case Asc => q.sortBy(_._3.text.asc)
-          case Desc => q.sortBy(_._3.text.desc)
+          case Asc => q.sortBy(_._3.numOfParties.asc)
+          case Desc => q.sortBy(_._3.numOfParties.desc)
         }
       }
 
-      object NumICol extends IntCol("#I", _._2.scenario.maxNumInputs) with IntRangeFilter {
+      object NumICol extends IntCol("#I", _._3.maxNumInputs) with IntRangeFilter {
         val sSelector = "#inputsFilter"
+        def performFilt(q: Query, cond: (Option[Int], Option[Int]))(implicit session: DatasetSession) = cond match {
+          case (None, None) => q
+          case (Some(lb), None) => q.filter(_._3.maxNumInputs >= lb)
+          case (None, Some(ub)) => q.filter(_._3.maxNumInputs <= ub)
+          case (Some(lb), Some(ub)) => q.filter(_._3.maxNumInputs >= lb).filter(_._3.maxNumInputs <= ub)
+        }
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._3.maxNumInputs.asc)
+          case Desc => q.sortBy(_._3.maxNumInputs.desc)
+        }
       }
 
-      object NumOCol extends IntCol("#O", _._2.scenario.maxNumOutputs) with IntRangeFilter {
+      object NumOCol extends IntCol("#O", _._3.maxNumOutputs) with IntRangeFilter {
         val sSelector = "#outputsFilter"
+        def performFilt(q: Query, cond: (Option[Int], Option[Int]))(implicit session: DatasetSession) = cond match {
+          case (None, None) => q
+          case (Some(lb), None) => q.filter(_._3.maxNumOutputs >= lb)
+          case (None, Some(ub)) => q.filter(_._3.maxNumOutputs <= ub)
+          case (Some(lb), Some(ub)) => q.filter(_._3.maxNumOutputs >= lb).filter(_._3.maxNumOutputs <= ub)
+        }
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._3.maxNumOutputs.asc)
+          case Desc => q.sortBy(_._3.maxNumOutputs.desc)
+        }
       }
+
       object LiftCol extends StringCol("IO-Lifted?", pair => booleanToString(pair._2.isIOLifted)) with BooleanFilter {
         val sSelector = "#ioLiftedFilter"
+        def performFilt(q: Query, cond: String)(implicit session: DatasetSession) = cond match {
+          case "yes" => q.filter(_._2.isIOLifted === true)
+          case "no" => q.filter(_._2.isIOLifted === false)
+          case _ => q
+        }
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._2.isIOLifted)
+          case Desc => q.sortBy(_._2.isIOLifted)
+        }
       }
+
       object CompositeCol extends StringCol("Composite?", pair => booleanToString(pair._2.isComposite)) with BooleanFilter {
         val sSelector = "#compositeFilter"
+        def performFilt(q: Query, cond: String)(implicit session: DatasetSession) = cond match {
+          case "yes" => q.filter(_._2.isComposite === true)
+          case "no" => q.filter(_._2.isComposite === false)
+          case _ => q
+        }
+        def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
+          case Asc => q.sortBy(_._2.isComposite)
+          case Desc => q.sortBy(_._2.isComposite)
+        }
       }
 
-      object CrossCol extends StringCol("Canonical", pair => canonicalKeysToHtml(pair._2.canonicalKeys).body)
+//      object CrossCol extends StringCol("Canonical", pair => canonicalKeysToHtml(pair._2.canonicalKeys).body)
 
-      val cols: Seq[DataTablesCol[_]] = Seq(KeyCol, ScenarioCol, NumPCol, NumICol, NumOCol, LiftCol, CompositeCol) ++ (path.map(_.toString) match {
-        case Seq("canonical") => Seq.empty[DataTablesCol[_]]
-        case _ => Seq(CrossCol)
-      })
+      val cols: Seq[DataTablesCol[_]] = Seq(KeyCol, ScenarioCol, NumPCol, NumICol, NumOCol, LiftCol, CompositeCol)
+// ++ (path.map(_.toString) match {
+//        case Seq("canonical") => Seq.empty[DataTablesCol[_]]
+//        case _ => Seq(CrossCol)
+//      })
 
       val id = "table"
       val jsonUrl = pathToUrl(branch.path) + ".json"
-
-      val query = c.readDigests(branch).toSeq
+      val query: Query = c.indexComp.expressionByNodeParentID(branchID)
     }
+
 
     dataset
   }
