@@ -159,8 +159,8 @@ object Application extends Controller {
           case _ => q
         }
         def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
-          case Asc => q.sortBy(_._2.isIOLifted)
-          case Desc => q.sortBy(_._2.isIOLifted)
+          case Asc => q.sortBy(_._2.isIOLifted.asc)
+          case Desc => q.sortBy(_._2.isIOLifted.desc)
         }
       }
 
@@ -172,8 +172,8 @@ object Application extends Controller {
           case _ => q
         }
         def performSort(q: Query, dir: Dir)(implicit session: DatasetSession) = dir match {
-          case Asc => q.sortBy(_._2.isComposite)
-          case Desc => q.sortBy(_._2.isComposite)
+          case Asc => q.sortBy(_._2.isComposite.asc)
+          case Desc => q.sortBy(_._2.isComposite.desc)
         }
       }
 
