@@ -1,16 +1,15 @@
-@(table: GenDataTable)
-
-<table id="@table.id" class="display">
+@(dataset: DataTablesDataset)
+<table id="@dataset.id" class="display">
   <thead>
-      @for(colDef <- table.columnDefs) {
-	<th>@colDef.title</th>
+      @for(c <- dataset.cols) {
+	<th>@c.title</th>
       }
   </thead>
   <tbody>
   </tbody>
   <tfoot>
-      @for(colDef <- table.columnDefs) {
-	<th>@colDef.title</th>
+      @for(c <- dataset.cols) {
+	<th>@c.title</th>
       }
   </tfoot>
 </table>
