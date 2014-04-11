@@ -78,7 +78,13 @@ trait DataTablesDataset extends DatasetFront {
     def dataTablesConfigJson = JsObject(dataTablesConfigJsonSeq)
 
     def columnFilterConfigJsonSeq = Seq.empty[(String, JsValue)]
-    def columnFilterConfigJson = JsObject(columnFilterConfigJsonSeq)
+    def columnFilterConfigJson = {
+      val cj = columnFilterConfigJsonSeq
+      cj.isEmpty match {
+        case true => JsNull
+        case false => JsObject(cj)
+      }
+    }
   }
 
   def sel: String = "#" + id
