@@ -1,7 +1,7 @@
 The database is divided in three parts:
 
 - the `canonical` folder contains Bell-like inequalities in the canonical form,
-  numbered from 0, in a form suitable for references,
+  numbered from 1, in a form suitable for references,
 - the `pubs` folder provides the forms of Bell-like inequalities that have been
   published in the litterature, staying as close as possible to the notation of the
   original paper,
